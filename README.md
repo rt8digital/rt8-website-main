@@ -20,9 +20,8 @@ and responsive information regarding the company and the role it plays.
 
 | Layer        | Technology |
 |--------------|------------|
-| Frontend     | React, TypeScript, Vite |
-| Backend      | Supabase (Auth, Storage, Realtime, RLS) |
-| Styling      | TailwindCSS / Custom Design System |
+| Frontend     | React, TypeScript, Vite 
+| Styling      | TailwindCSS / Custom Design System + React Bits |
 | Deployment   | Cpanel Hosting (recommended) |
 
 ---
@@ -39,7 +38,6 @@ rt8.co.za/
 │   ├── styles/           # Global styles & Tailwind config
 │   └── assets/           # Images, fonts, icons
 ├── public/               # Static files
-├── supabase/             # Database schemas, migrations
 ├── tests/                # Unit & integration tests
 └── README.md             # Project documentation
 ```
@@ -72,17 +70,6 @@ Preview production build:
 
 ```bash
 npm run preview
-```
-
----
-
-## 🔑 Environment Variables
-
-Create a `.env` file in the root directory:
-
-```bash
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ---
