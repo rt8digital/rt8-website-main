@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
+import ScrambledText from './textfx/ScrambledText/ScrambledText';
 
 const Footer: React.FC = () => {
   return (
@@ -7,12 +8,50 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-center">
           <p className="text-white/80 text-sm font-medium tracking-wide flex items-center gap-2">
-            Built with 
+            <ScrambledText
+              as="span"
+              radius={60}
+              duration={0.8}
+              speed={0.4}
+              scrambleChars=".:"
+              className="text-white/80"
+            >
+              Built with
+            </ScrambledText>
             <Heart className="w-4 h-4 text-red-500 animate-pulse" fill="currentColor" />
-            By 
-            <span className="text-red-500 font-semibold">Rotate</span>
+            <ScrambledText
+              as="span"
+              radius={60}
+              duration={0.8}
+              speed={0.4}
+              scrambleChars=".:"
+              className="text-white/80"
+            >
+              By
+            </ScrambledText>
+            <span className="text-red-500 font-semibold">
+              <ScrambledText
+                as="span"
+                radius={60}
+                duration={0.8}
+                speed={0.4}
+                scrambleChars=".:"
+                className="text-red-500"
+              >
+                Rotate
+              </ScrambledText>
+            </span>
             <span className="text-white/60">|</span>
-            <span className="text-white/60">Hosting by Psycom</span>
+            <ScrambledText
+              as="span"
+              radius={60}
+              duration={0.8}
+              speed={0.4}
+              scrambleChars=".:"
+              className="text-white/60"
+            >
+              Hosting by Psycom
+            </ScrambledText>
           </p>
         </div>
       </div>

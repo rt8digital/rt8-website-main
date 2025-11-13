@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Users, Mail, Linkedin, Twitter, Instagram, Music, Award, Globe } from 'lucide-react';
+import ChromaGrid, { ChromaItem } from './textfx/ChromaGrid/ChromaGrid';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 interface MeetTheTeamProps {
   setCurrentPage: (page: string) => void;
@@ -13,6 +15,181 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
     setIsLoaded(true);
   }, []);
 
+  // Tilt effect configuration
+  const springValues = {
+    damping: 30,
+    stiffness: 100,
+    mass: 2,
+  };
+
+  const rotateAmplitude = 12;
+  const scaleOnHover = 1.05;
+
+  // Component for individual team member card with tilt effect
+  const TeamMemberCard = ({ member, index }: { member: any, index: number }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const rotateX = useSpring(useMotionValue(0), springValues);
+    const rotateY = useSpring(useMotionValue(0), springValues);
+    const scale = useSpring(1, springValues);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!cardRef.current) return;
+
+      const rect = cardRef.current.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left - rect.width / 2;
+      const offsetY = e.clientY - rect.top - rect.height / 2;
+
+      const rotationX = (offsetY / (rect.height / 2)) * -rotateAmplitude;
+      const rotationY = (offsetX / (rect.width / 2)) * rotateAmplitude;
+
+      rotateX.set(rotationX);
+      rotateY.set(rotationY);
+    };
+
+    const handleMouseEnter = () => {
+      scale.set(scaleOnHover);
+      setHoveredIndex(index);
+    };
+
+    const handleMouseLeave = () => {
+      scale.set(1);
+      rotateX.set(0);
+      rotateY.set(0);
+      setHoveredIndex(null);
+    };
+
+    return (
+      <motion.div
+        ref={cardRef}
+        className={`relative flex flex-col rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer group ${
+          isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+        style={{
+          transitionDelay: `${400 + index * 100}ms`,
+          background: 'linear-gradient(145deg,#EF4444,#000)',
+          '--spotlight-color': 'rgba(255,255,255,0.3)',
+          rotateX,
+          rotateY,
+          scale,
+          transformStyle: 'preserve-3d'
+        } as any}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Spotlight effect */}
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 opacity-0 group-hover:opacity-100"
+          style={{
+            background: 'radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%)',
+          }}
+        />
+        {/* Member Image with Glitch Effects */}
+        <div className="relative h-64 overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+          <img
+            src={hoveredIndex === index ? member.imageHover : member.imageStandard}
+            alt={member.name}
+            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 glitch-image rounded-[15px]"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=400';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          {/* Glitch overlay effects */}
+          <div className="glitch-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="glitch-layer-1 absolute inset-0 bg-red-500/20 mix-blend-multiply"></div>
+            <div className="glitch-layer-2 absolute inset-0 bg-cyan-500/20 mix-blend-screen"></div>
+            <div className="glitch-layer-3 absolute inset-0 bg-yellow-500/10 mix-blend-overlay"></div>
+          </div>
+
+          {/* Scanlines effect */}
+          <div className="scanlines absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+
+          <div className="absolute bottom-4 left-4 right-4 z-10">
+            <h3 className="text-xl font-bold text-white mb-1 glitch-text">{member.name}</h3>
+            <p className="text-red-500 font-medium">{member.role}</p>
+          </div>
+        </div>
+
+        {/* Member Info */}
+        <div className="p-6" style={{ transform: 'translateZ(30px)' }}>
+          <div className="mb-4">
+            <span className="inline-block bg-red-500/20 text-red-500 px-3 py-1 rounded-full text-sm font-medium">
+              {member.department}
+            </span>
+          </div>
+
+          <p className="text-gray-300 text-sm leading-relaxed mb-4">
+            {member.bio}
+          </p>
+
+          {/* Skills */}
+          <div className="mb-4">
+            <h4 className="text-white font-semibold mb-2 text-sm">Expertise:</h4>
+            <div className="flex flex-wrap gap-2">
+              {member.skills.map((skill: string) => (
+                <span
+                  key={skill}
+                  className="bg-black/60 text-gray-300 px-2 py-1 rounded text-xs hover:bg-red-500/20 hover:text-red-500 transition-colors duration-300"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex space-x-3">
+            {member.social.email && (
+              <a
+                href={`mailto:${member.social.email}`}
+                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                title="Email"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+            )}
+            {member.social.linkedin && (
+              <a
+                href={member.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                title="LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+            )}
+            {member.social.twitter && (
+              <a
+                href={member.social.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                title="Twitter"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+            )}
+            {member.social.instagram && (
+              <a
+                href={member.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                title="Instagram"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
+
   // Team data based on typical music label structure
   const teamMembers = [
     {
@@ -21,7 +198,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music & Digital',
       bio: 'No need to pay this bro much attention, he just enjoys creating stuff out of nothing, like music or these websites you see.',
       imageStandard: 'https://lh3.googleusercontent.com/MNoTybJTjs--lcDuXcjKA0Mms5LXOrRrvsNw6C9oW_aQYbkSW-kb6zmjp7i1HkZbDTMWy6i7JARNx8o_cg=s265-w265-h265',
-      imageHover: 'https://lh3.googleusercontent.com/4jQlebdbQJ_roDr0fXlbgvIRIRFzdjyDfxBsNJR3hsAzfdmeu7ZWjcZLWemN3cCcojIpfUxkr7yAgIi7rw=s265-w265-h265', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/P-Y_mTizhfzlL-MljvpLY83C5Rh0xarR1auLWpMLZFtTUnRM6pPcaTE7l00h4PcvI-FIZRz2hdr_qi_Kcw=s265-w265-h265', // Pexels image for hover
       skills: ['Operations', 'Web Dev', 'Product Management & Administration, Producer / DJ'],
       social: {
         email: 'ilyas@rt8.co.za',
@@ -35,7 +212,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music',
       bio: 'One of the OG founders of SonicBass Records, the Label that started the 10 year journey leading to the establishment of RT8, there has been speculation that Dovydas is behind "Fictional Dovy" but we can vouch for the fact that we have neither seen Dovydas or Fictional Dovy in the same room together...',
       imageStandard: 'https://lh3.googleusercontent.com/FnKdNIzeXL0vUxlfW6PcA4GlL--MxVFM5XR-ayzDzzGsj5qa-EK0UmxlW2Di7YMSWPfYJ9gg3E2VJdgjsQ=s265-w265-h265',
-      imageHover: 'https://lh3.googleusercontent.com/UrGRZuTQdQFZpAhmGL9nRr05mEdE8--GBnEIXJii3nZQGCyE0OSuLxf4c3nnSvINRIQ5uwxTDNGTZhAC9Q=s265-w265-h265', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/07sPzuJoEIWCAkBfYHy8F5p9GpctVR3j2I89FSexXJzrk3BT1U504btwB5Vw1iLdAQYwP0y6L_MmmzSBWw=s265-w265-h265', // Pexels image for hover
       skills: ['Radio Persona', 'Operations', 'DJ / Producer / Lover'],
       social: {
         email: 'dovydas@rt8.co.za',
@@ -49,7 +226,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music & Digital',
       bio: 'Katon is the Swiss Army Knife of the RT8 team. A multi-instrumentalist, Music Producer, Festival and Club DJ, living near the ocean gives him *special capabilities*... Or maybe its the coffee, we cant really tell!',
       imageStandard: 'https://lh3.googleusercontent.com/p/AF1QipPx1cj2GFN8L-n1M1-Qilfaq8a5C-d4C-a-K-yF=w223-h279-n-k-no-nu',
-      imageHover: 'https://lh3.googleusercontent.com/p/AF1QipPWG6egx_28S9cqZc3heQkf2a-addMM3KkYLoBh=s680-w680-h510-rw', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/jyZmqbgGfxHrcGH59wN-UQFH5NY87GYYvpRK81-mhSKXhULG_NcVoeiJ1CkU03_Ksrt_druh41103WnpUw=s265-w265-h265', 
       skills: ['Caffeine Consumption', 'Operations', 'DJ / Producer'],
       social: {
         email: 'testdriver@rt8.co.za',
@@ -63,7 +240,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music & Digital',
       bio: 'JoMo is one of the coolest gents on our team, mad photoshop skills and the ability to throw the craziest parties, makes him a valued teammate, We also really hope his singing career takes off!!!',
       imageStandard: 'https://lh3.googleusercontent.com/6ES2CmNVASNTZoPK03UO0unSHGgUu3IbyKjvloowrM0MN_3UMH4k2HeDXtN-XQuEcGwz_p355el1BFAAzw=s265-w265-h265',
-      imageHover: 'https://lh3.googleusercontent.com/EBEUjJl7R1FZoH0lqCN1OA0FzUW_8UP1BeZGp4_zD1dnu0G6XEUHcMKOYezupfUX7mvcePgofCeGYU1C3g=s265-w265-h265', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/G_-orBLpal-9GtqLukk0BPN5pOek9IZ4AW6s3iKoSz1UN9VV-McxLecgEuW_1FTE0m9yRXP1Czn02Z5ucA=s265-w265-h265', // Pexels image for hover
       skills: ['Audio Production', 'Operations', 'Graphic Design'],
       social: {
         email: 'jomo@rt8.co.za',
@@ -77,7 +254,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music',
       bio: 'Rhyan, also known as Pando G, the moodiest homie on the rotate crew, but also a mad creative genius making biig moves in the deep house scene!',
       imageStandard: 'https://lh3.googleusercontent.com/ku9slUbAfGIulTxy-KSj6Cufvcy9MByFhQQKWOJ36yFiiBLKihqqOcj9Do-C6T8zT1J8MMUboQaAyTgWTw=s265-w265-h265',
-      imageHover: 'https://lh3.googleusercontent.com/_eHLPd8LG8po5enI6BwfUzzPNdjr8H7UUM73wWk22St_o4oT21HSTfU2sGYOvzwo-NjAgbdxiZz5-_eBhw=s265-w265-h265', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/uWHZv-w_ANTBRRm7IB0rIsX2aKG1jMedMvrXfiI61Zxl5bMDXY8Ayq9wdF8BHVFeB5O2TR68ropTOIyWdw=s265-w265-h265', // Pexels image for hover
       skills: ['Audio Production', 'Operations', 'Acquisitions'],
       social: {
         email: 'rhyan@rt8.co.za',
@@ -91,7 +268,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music',
       bio: 'Ywonne is our friendly neighbourhood aunty with the biggest heart, she has been with Rotate since its inception, she enjoys sipping Piña Coladas and getting caught in the rain. She also enjoys music and watching artists establish their dreams...',
       imageStandard: 'https://lh3.googleusercontent.com/7kOf_oA3i2tVg-TT78HOYdiPduwcLJePiER_rcZ7bxU6SDMtzAuso5L6S5GMaG0O5mx1LJMdnIBmr9hT2A=s265-w265-h265',
-      imageHover: 'https://lh3.googleusercontent.com/g_H8fEp6tgGV4FsxzghcH0tlMOvjQvvB2Jd7JTMQhp01yfWq6Bsx1anwOrBXo4D347Ysd7LgADhWnrCwtg=s265-w265-h265', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/CkPt3ZWFZTQbHVtfkzNgeLhL9-b5s2_OznVEhDhvGD2f_Um48XcUULU8D85vU9lP657FoZFFFYLsl6Ny7w=s265-w265-h265', // Pexels image for hover
       skills: ['Digital Marketing', 'Operations', 'Administration'],
       social: {
         email: 'ywonne@rt8.co.za',
@@ -105,7 +282,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music & Digital',
       bio: 'Drew (the Djinn) Swango, Founder of TAG is a well presenced music wizz and acquirer of talents...',
       imageStandard: 'https://lh3.googleusercontent.com/p/AF1QipMCGK1HUU9PdAxRRlzjoggM-_K1D2hD2bbtagzi=s680-w680-h510-rw',
-      imageHover: 'https://lh3.googleusercontent.com/p/AF1QipPF3nvrAxkh6d4_gGva8aRPRJq6GeT_HvEEn-mi=s680-w680-h510-rw', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/FlU3x41nZ0LrU4yUu_xTiDP_puTPts0Fm-eRCjV5i5alQLMdaikzwx40XTyaWkc_a0zW3Zg9miINzUpBKA=s265-w265-h265', // Pexels image for hover
       skills: ['Music Production', 'Talent Acquisition', 'Operations'],
       social: {
         email: 'drew@rt8.co.za',
@@ -119,7 +296,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music',
       bio: 'Zaphixx is our local Pakistani homie from Karachi and founder of BeNaam Records, he likes chai, playing dying light with the homies and dislikes efficient time management, Zaphixx is a talented musician and DJ - who also happens to be balding',
       imageStandard: 'https://lh3.googleusercontent.com/p/AF1QipN7s1TL_j-YwK4AbpP5xZG4wFR9F5STKYSxsykv=s680-w680-h510-rw',
-      imageHover: 'https://lh3.googleusercontent.com/p/AF1QipNbN6JtRY4m6IUmsz9PH8AiKgTe-sxjF1JEb5Kf=s680-w680-h510-rw', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/0F1rIgAc_sjNjM8PBDWnthzbC4-MzbOkEIT64HbhqGJokYNwTs49sAvIKlFdb6m0guLGlD0w-oyQv8phXw=s265-w265-h265', // Pexels image for hover
       skills: ['Operations', 'Talent Acquisition', 'Music Producer / DJ'],
       social: {
         email: 'alfaid@rt8.co.za',
@@ -133,29 +310,53 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
       department: 'Music',
       bio: 'Vijay’s been a Hard Dance heavyweight since the early 2000s, spinning UK Hard House and Trance across KZN’s biggest stages. As J303, he’s charted globally, heads up A&R at two labels, and co-founded more collectives than your average rave has lasers.',
       imageStandard: 'https://lh3.googleusercontent.com/34rCEkWy2f2dT-obr8400qWik_kb_Ori0vzIxxV3xMkqrhHlFhHJyd6Z0C5WmwOQBjrwkUaosErXgFh_5w=s265-w265-h265',
-      imageHover: 'https://lh3.googleusercontent.com/2WSa6HOoftzHcee9hHe7bUCt9dP9guE3A7_iKFuLgoV4iBXx25zU-Yt_s6fOTKKFTM08stcEfYd3GAy6uA=s265-w265-h265', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/1gmFlYgZCc8TpBz8bvvrYWM2zfUQKEL_5pvSdHW1jcOd_Er-S_t3f8Ej_SNiAtqpBtT18uOQijWppNobiw=s265-w265-h265', // Pexels image for hover
       skills: ['Operations', 'Talent Acquisition', 'Music Producer / DJ'],
       social: {
-        email: 'alfaid@rt8.co.za',
+        email: 'vijay@rt8.co.za',
         linkedin: 'https://www.linkedin.com/in/muhammad-alfaid-maqsood-ba1398333/',
         instagram: 'https://www.instagram.com/zaphixxofficial/',
+      }
+			},
+      {
+      name: 'John Quinton Bruce',
+      role: 'Lead Operator',
+      department: 'Music & Digital',
+      bio: 'John aka Hardmasters is a seasoned music producer and first time vibe coder assisting us with day to day operations and the usual bullsh*t.',
+      imageStandard: 'https://lh3.googleusercontent.com/0cN5Ftg0Y7YaagI4b-eOnQLSq_bYVYrzNk9T90ywCMaYMStWjfxEPoUc4MuKEV04S2mDBdqTro6VF9A0IA=s265-w265-h265',
+      imageHover: 'https://lh3.googleusercontent.com/epPyOv-a5xPQu0PNqWodD8d37qAVmlAtpfKSDnnpEQQI1fNQLU1buxCgIL_J2IGdD05LX76JiUJebmzKZg=s265-w265-h265', // Pexels image for hover
+      skills: ['Operations', 'Vibe Coding', 'Music Producer / DJ'],
+      social: {
+        email: 'john@rt8.co.za',
+        instagram: 'https://www.instagram.com/hardmasterz/',
       }
 			},
 		{
       name: 'Alexandre Marrier Dunienville',
       role: 'Digital Administrator',
       department: 'Music',
-      bio: '',
+      bio: 'The latest addition to the Music Administration Team, Alex is here to ensure smooth operations and efficient talent acquisition within the department.',
       imageStandard: 'https://lh3.googleusercontent.com/SF2TFWgUU11-00lgfz4g-Tbek0uUc5LNwGcW9SUrGojTUMnGQR9PiB7SLOZwNAcxpedDveNmh9S3ke0lJg=s265-w265-h265',
-      imageHover: 'https://lh3.googleusercontent.com/M_TXt-1vl7GPR8p3EadxycahhTXF34w3GXbFiYZQG34bZOkZW11ajdWInWHVAidG58tmex1zeVDnJLiHtQ=s265-w265-h265', // Pexels image for hover
+      imageHover: 'https://lh3.googleusercontent.com/qeeNPubFXLnriOjK5He7YTysLQNOwH4LLjGBZYObT5SyS5anIt9sO9-LmhDao5l9s0r8ZgLrDn4EnZWX5w=s265-w265-h265', // Pexels image for hover
       skills: ['Operations', 'Talent Acquisition'],
       social: {
         email: 'alex@rt8.co.za',
-        linkedin: 'https://www.linkedin.com/in/muhammad-alfaid-maqsood-ba1398333/',
-        instagram: 'https://www.instagram.com/zaphixxofficial/',
+        instagram: 'https://www.instagram.com/teh_dee/',
       }
     },
   ];
+
+  // Transform team members to ChromaItem format
+  const chromaItems: ChromaItem[] = teamMembers.map((member) => ({
+    image: member.imageStandard,
+    title: member.name,
+    subtitle: member.role,
+    handle: member.social.instagram ? `@${member.social.instagram.split('/').pop()}` : undefined,
+    location: member.department,
+    borderColor: '#EF4444', // Red color to match theme
+    gradient: 'linear-gradient(145deg,#EF4444,#000)',
+    url: member.social.instagram || member.social.linkedin
+  }));
 
   return (
     <section className="min-h-screen flex items-center justify-center relative pt-32 pb-32">
@@ -176,118 +377,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
         {/* Team Grid */}
         <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {teamMembers.map((member, index) => (
-            <div 
-              key={member.name}
-              className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg overflow-hidden hover:border-red-500/40 transition-all duration-500 transform hover:scale-105 hover:bg-red-500/5 group ${
-                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{ transitionDelay: `${400 + index * 100}ms` }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {/* Member Image with Glitch Effects */}
-              <div className="relative h-64 overflow-hidden">
-                <img 
-                  src={hoveredIndex === index ? member.imageHover : member.imageStandard} 
-                  alt={member.name}
-                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 glitch-image"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=400'; // Fallback image
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                
-                {/* Glitch overlay effects */}
-                <div className="glitch-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="glitch-layer-1 absolute inset-0 bg-red-500/20 mix-blend-multiply"></div>
-                  <div className="glitch-layer-2 absolute inset-0 bg-cyan-500/20 mix-blend-screen"></div>
-                  <div className="glitch-layer-3 absolute inset-0 bg-yellow-500/10 mix-blend-overlay"></div>
-                </div>
-                
-                {/* Scanlines effect */}
-                <div className="scanlines absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-                
-                <div className="absolute bottom-4 left-4 right-4 z-10">
-                  <h3 className="text-xl font-bold text-white mb-1 glitch-text">{member.name}</h3>
-                  <p className="text-red-500 font-medium">{member.role}</p>
-                </div>
-              </div>
-
-              {/* Member Info */}
-              <div className="p-6">
-                <div className="mb-4">
-                  <span className="inline-block bg-red-500/20 text-red-500 px-3 py-1 rounded-full text-sm font-medium">
-                    {member.department}
-                  </span>
-                </div>
-                
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                  {member.bio}
-                </p>
-
-                {/* Skills */}
-                <div className="mb-4">
-                  <h4 className="text-white font-semibold mb-2 text-sm">Expertise:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {member.skills.map((skill) => (
-                      <span 
-                        key={skill}
-                        className="bg-black/60 text-gray-300 px-2 py-1 rounded text-xs hover:bg-red-500/20 hover:text-red-500 transition-colors duration-300"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Social Links */}
-                <div className="flex space-x-3">
-                  {member.social.email && (
-                    <a 
-                      href={`mailto:${member.social.email}`}
-                      className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
-                      title="Email"
-                    >
-                      <Mail className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.social.linkedin && (
-                    <a 
-                      href={member.social.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
-                      title="LinkedIn"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.social.twitter && (
-                    <a 
-                      href={member.social.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
-                      title="Twitter"
-                    >
-                      <Twitter className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.social.instagram && (
-                    <a 
-                      href={member.social.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
-                      title="Instagram"
-                    >
-                      <Instagram className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
+            <TeamMemberCard key={member.name} member={member} index={index} />
           ))}
         </div>
 

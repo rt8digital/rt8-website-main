@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Building2, Music, Users, Globe, Award, TrendingUp, ExternalLink } from 'lucide-react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 interface LabelsOnRotateProps {
   setCurrentPage: (page: string) => void;
@@ -11,6 +12,123 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  // Tilt effect configuration - optimized for performance
+  const springValues = {
+    damping: 25, // Reduced from 30
+    stiffness: 80, // Reduced from 100
+    mass: 1, // Reduced from 2
+  };
+
+  const rotateAmplitude = 8; // Reduced from 12
+  const scaleOnHover = 1.02; // Reduced from 1.05
+
+  // Component for individual label card with tilt effect
+  const LabelCard = ({ label, index }: { label: any, index: number }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const rotateX = useSpring(useMotionValue(0), springValues);
+    const rotateY = useSpring(useMotionValue(0), springValues);
+    const scale = useSpring(1, springValues);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!cardRef.current) return;
+
+      const rect = cardRef.current.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left - rect.width / 2;
+      const offsetY = e.clientY - rect.top - rect.height / 2;
+
+      const rotationX = (offsetY / (rect.height / 2)) * -rotateAmplitude;
+      const rotationY = (offsetX / (rect.width / 2)) * rotateAmplitude;
+
+      rotateX.set(rotationX);
+      rotateY.set(rotationY);
+    };
+
+    const handleMouseEnter = () => {
+      scale.set(scaleOnHover);
+    };
+
+    const handleMouseLeave = () => {
+      scale.set(1);
+      rotateX.set(0);
+      rotateY.set(0);
+    };
+
+    return (
+      <motion.div
+        ref={cardRef}
+        className={`relative flex flex-col rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer group ${
+          label.featured ? 'ring-2 ring-red-500/30' : ''
+        } ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        style={{
+          transitionDelay: `${800 + index * 100}ms`,
+          background: 'linear-gradient(145deg,#EF4444,#000)',
+          '--spotlight-color': 'rgba(255,255,255,0.3)',
+          rotateX,
+          rotateY,
+          scale,
+          transformStyle: 'preserve-3d'
+        } as any}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Spotlight effect */}
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 opacity-0 group-hover:opacity-100"
+          style={{
+            background: 'radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%)',
+          }}
+        />
+        {label.featured && (
+          <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
+            FEATURED
+          </div>
+        )}
+
+        {/* Label Logo */}
+        <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-8" style={{ transform: 'translateZ(0)' }}>
+          <img
+            src={label.logo}
+            alt={label.name}
+            className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+        </div>
+
+        {/* Label Info */}
+        <div className="p-6" style={{ transform: 'translateZ(30px)' }}>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xl font-bold text-white">{label.name}</h3>
+            <span className="bg-red-500/20 text-red-500 px-3 py-1 rounded-full text-sm font-medium">
+              {label.genre}
+            </span>
+          </div>
+
+          <p className="text-gray-300 text-sm leading-relaxed mb-4">
+            {label.description}
+          </p>
+
+          {/* Label Stats */}
+          <div className="text-center mb-4">
+            <div className="text-white font-bold">{label.founded}</div>
+            <div className="text-gray-400 text-xs">Founded</div>
+          </div>
+
+          {/* Action Button */}
+          <div className="flex justify-center">
+            <button
+              onClick={() => window.location.href = label.instagram}
+              className="w-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span>Instagram</span>
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
 
   const labels = [
     {
@@ -41,15 +159,6 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
       featured: true
     },
     {
-      name: 'Sound We Found',
-      logo: 'https://lh3.googleusercontent.com/uM1em3TmfNM9_jFAO6vDCEfXcnUDkgiGOzsN87mOm4Xdga4NDgnuu2lMol_1ex8pByzpm-R_JM-1Eo2JxA=s265-w265-h265',
-      genre: 'Melodic Techno / House',
-      founded: '2025',
-      description: 'The latest establishment coming from Producer & DJ "Colby Curtola"',
-      instagram: 'https://www.instagram.com/thesoundwefound/',
-      featured: true
-    },
-    {
       name: 'Aurorafields Records',
       logo: 'https://lh3.googleusercontent.com/wMBkT8-T2bVaiY4Cnb5qdfr1QCXqI0ZJLI5xcfdxzYJYv2BWRtrfdv-zhJF7l3d_ODeeBdazY38w9_IhLA=s265-w265-h265',
       genre: 'Deep House',
@@ -67,15 +176,9 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
       instagram: 'https://www.instagram.com/5selectsounds/',
       featured: true
     },
-    {
-      name: 'Bundoodoof Records',
-      logo: 'https://lh3.googleusercontent.com/cH05ryJusZme61y6iZPt1sTGqd6hfw40nTFJsPdtY1jaHWgnFX2pMN9U_sN9ENRCd5Hj-HpNvbkJ8DHZMA=s265-w265-h265',
-      genre: 'Psychadelic',
-      founded: '2025',
-      description: 'Its bundoodoof bro! The spiciest psychadelic bazaar.',
-      instagram: 'https://instagram.com/rt8.co.za',
-      featured: true
-    },
+    
+  
+
     {
       name: 'Drum & Debauchery',
       logo: 'https://lh3.googleusercontent.com/jShwO7ahNi_6cQDF9uowMTUtYWu12qciCY27RLD36Klxtj2viSX3vZjgUriy1HT7d85LpoZZN8_KYZ9gew=s265-w265-h265',
@@ -223,60 +326,7 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
           <h2 className="text-3xl font-bold text-center text-white mb-12">Our Partner Labels</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {labels.map((label, index) => (
-              <div 
-                key={label.name}
-                className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg overflow-hidden hover:border-red-500/40 transition-all duration-500 transform hover:scale-105 hover:bg-red-500/5 group relative ${
-                  label.featured ? 'ring-2 ring-red-500/30' : ''
-                } ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                style={{ transitionDelay: `${800 + index * 100}ms` }}
-              >
-                {label.featured && (
-                  <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-                    FEATURED
-                  </div>
-                )}
-
-                {/* Label Logo */}
-                <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-8">
-                  <img 
-                    src={label.logo} 
-                    alt={label.name}
-                    className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-                </div>
-
-                {/* Label Info */}
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-white">{label.name}</h3>
-                    <span className="bg-red-500/20 text-red-500 px-3 py-1 rounded-full text-sm font-medium">
-                      {label.genre}
-                    </span>
-                  </div>
-                  
-                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                    {label.description}
-                  </p>
-
-                  {/* Label Stats */}
-                  <div className="text-center mb-4">
-                    <div className="text-white font-bold">{label.founded}</div>
-                    <div className="text-gray-400 text-xs">Founded</div>
-                  </div>
-
-                  {/* Action Button */}
-                  <div className="flex justify-center">
-                    <button 
-                      onClick={() => window.location.href = label.instagram}
-                      className="w-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Instagram</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <LabelCard key={label.name} label={label} index={index} />
             ))}
           </div>
         </div>

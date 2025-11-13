@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Menu, X, Music, Info, ShoppingBag, Upload, Headphones, Users, Briefcase, Building2, Heart, Settings } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Music, Info, ShoppingBag, Upload, Headphones, Users, Briefcase, Building2, Heart } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ScrambledText from './textfx/ScrambledText/ScrambledText';
 import {
   faInstagram,
   faSpotify,
   faFacebook,
   faYoutube,
   faTiktok,
-  faWhatsapp,
   faDiscord
 } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +20,7 @@ interface HeaderProps {
 interface SubMenuItem {
   label: string;
   icon: React.ComponentType<any>;
-  page: string;
+  page?: string;
   href?: string;
   external?: boolean;
 }
@@ -35,11 +35,11 @@ interface MenuItem {
 }
 
 const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [leaveTimeout, setLeaveTimeout] = useState<NodeJS.Timeout | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   const menuItems: MenuItem[] = [
     {
@@ -101,7 +101,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
   const socialLinks = [
     {
       icon: faInstagram,
-      href: 'https://instagram.com/rt8.co.za',
+      href: 'https://instagram.com/rt8_music',
       label: 'Instagram',
       color: 'hover:text-pink-500'
     },
@@ -118,14 +118,8 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
       color: 'hover:text-blue-500'
     },
     {
-      icon: faWhatsapp,
-      href: 'https://wa.me/27847990432',
-      label: 'WhatsApp',
-      color: 'hover:text-green-400'
-    },
-    {
       icon: faDiscord,
-      href: 'https://discord.com/invite/8tQcxGQu?utm_source=Discord%20Widget&utm_medium=Connect',
+      href: 'https://discord.gg/CJGGDMVjNP',
       label: 'Discord',
       color: 'hover:text-indigo-400'
     },
@@ -157,7 +151,6 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
     } else {
       setCurrentPage('home');
     }
-    setIsMenuOpen(false);
     setActiveSubmenu(null);
   };
 
@@ -202,12 +195,67 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-red-500/20">
+    <header ref={containerRef} className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-red-500/20">
       <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo with Enhanced Glowing Effect */}
+        <div className="flex items-center justify-between md:justify-between">
+          {/* Mobile Pill Navigation - Icons only */}
+          <div className="md:hidden flex items-center space-x-2">
+            {menuItems.map((item) => (
+              <div key={item.label} className="relative">
+                <button
+                  onClick={() => {
+                    if (item.subItems) {
+                      setActiveSubmenu(activeSubmenu === item.label ? null : item.label);
+                    } else {
+                      handleMenuClick(item);
+                    }
+                  }}
+                  className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${
+                    currentPage === item.page ? 'text-red-500 bg-red-500/10' : 'text-white hover:text-red-500 hover:bg-red-500/5'
+                  }`}
+                  title={item.label}
+                >
+                  <item.icon className="w-5 h-5" />
+                  {currentPage === item.page && (
+                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-red-500 rounded-full"></div>
+                  )}
+                </button>
+
+                {/* Mobile Dropdown */}
+                {item.subItems && activeSubmenu === item.label && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-black/90 backdrop-blur-md border border-red-500/20 rounded-lg shadow-xl z-50">
+                    <div className="py-2">
+                      {item.subItems.map((subItem) => (
+                        <button
+                          key={subItem.label}
+                          onClick={() => handleMenuClick(subItem)}
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-left transition-all duration-300 hover:bg-red-500/10 hover:text-red-500 ${
+                            currentPage === subItem.page ? 'text-red-500 bg-red-500/5' : 'text-white'
+                          }`}
+                        >
+                          <subItem.icon className="w-4 h-4 flex-shrink-0" />
+                          <ScrambledText
+                            as="span"
+                            radius={60}
+                            duration={0.8}
+                            speed={0.4}
+                            scrambleChars=".:"
+                            className="font-medium text-sm tracking-wide"
+                          >
+                            {subItem.label}
+                          </ScrambledText>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Logo - Centered on mobile, right side on desktop */}
           <div
-            className="flex items-center space-x-2 sm:space-x-3 cursor-pointer group"
+            className="flex items-center space-x-2 sm:space-x-3 cursor-pointer group md:ml-auto"
             onClick={handleLogoClick}
           >
             <div className="relative w-8 h-8 sm:w-12 sm:h-12 overflow-hidden rounded-lg transform transition-all duration-700 group-hover:scale-110 group-hover:rotate-[360deg]">
@@ -235,20 +283,30 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
               </div>
             </div>
             <div className="text-white font-bold text-sm sm:text-lg tracking-wider transition-all duration-700 group-hover:text-red-400">
-              <span className="text-red-500 transition-all duration-700 group-hover:text-red-300 group-hover:drop-shadow-lg"
-                    style={{
-                      textShadow: '0 0 10px rgba(239, 68, 68, 0.5)',
-                      transition: 'all 0.7s ease-in-out'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.textShadow = '0 0 15px rgba(239, 68, 68, 0.8), 0 0 25px rgba(239, 68, 68, 0.6)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.textShadow = '0 0 10px rgba(239, 68, 68, 0.5)';
-                    }}>
+              <ScrambledText
+                as="span"
+                radius={80}
+                duration={1.0}
+                speed={0.4}
+                scrambleChars=".:"
+                className="text-red-500 transition-all duration-700 group-hover:text-red-300 group-hover:drop-shadow-lg"
+                style={{
+                  textShadow: '0 0 10px rgba(239, 68, 68, 0.5)',
+                  transition: 'all 0.7s ease-in-out'
+                }}
+              >
                 RT8
-              </span>
-              <span className="text-white ml-1 sm:ml-2 transition-colors duration-700 group-hover:text-gray-200 text-xs sm:text-base">ROTATE GROUP</span>
+              </ScrambledText>
+              <ScrambledText
+                as="span"
+                radius={80}
+                duration={1.0}
+                speed={0.4}
+                scrambleChars=".:"
+                className="text-white ml-1 sm:ml-2 transition-colors duration-700 group-hover:text-gray-200 text-xs sm:text-base"
+              >
+                ROTATE GROUP
+              </ScrambledText>
             </div>
           </div>
 
@@ -327,7 +385,16 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
                             }`}
                           >
                             <subItem.icon className="w-4 h-4 flex-shrink-0" />
-                            <span className="font-medium text-sm tracking-wide">{subItem.label}</span>
+                            <ScrambledText
+                              as="span"
+                              radius={60}
+                              duration={0.8}
+                              speed={0.4}
+                              scrambleChars=".:"
+                              className="font-medium text-sm tracking-wide"
+                            >
+                              {subItem.label}
+                            </ScrambledText>
                           </button>
                         ))}
                       </div>
@@ -337,82 +404,9 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
               ))}
             </nav>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-white hover:text-red-500 transition-all duration-300 transform hover:scale-110"
-          >
-            {isMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
-          </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 animate-in slide-in-from-top duration-300">
-            {/* Mobile Social Icons */}
-            <div className="flex justify-center space-x-4 sm:space-x-6 mb-6 pb-4 border-b border-red-500/20 overflow-x-auto">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className={`text-white/70 transition-all duration-300 ${social.color} hover:scale-110 transform flex-shrink-0`}
-                  aria-label={social.label}
-                  title={social.label}
-                  target={social.href.startsWith('http') ? '_blank' : undefined}
-                  rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                >
-                  <FontAwesomeIcon icon={social.icon} className="w-4 h-4 sm:w-5 sm:h-5" />
-                </a>
-              ))}
-            </div>
 
-            {/* Mobile Menu Items with Text */}
-            <nav className="flex flex-col space-y-2 max-h-80 overflow-y-auto">
-              {menuItems.map((item, index) => (
-                <div key={item.label}>
-                  <button
-                    onClick={() => !item.subItems && handleMenuClick(item)}
-                    className={`w-full flex items-center space-x-3 transition-all duration-300 py-3 px-4 text-left rounded-lg group ${
-                      currentPage === item.page
-                        ? 'text-red-500 bg-red-500/10'
-                        : 'text-white hover:text-red-500 hover:bg-red-500/5'
-                    }`}
-                    style={{
-                      animationDelay: `${index * 50}ms`
-                    }}
-                  >
-                    <item.icon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300 flex-shrink-0" />
-                    <span className="font-medium tracking-wide text-sm sm:text-base">{item.label}</span>
-                    <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    </div>
-                  </button>
-
-                  {/* Mobile Submenu Items */}
-                  {item.subItems && (
-                    <div className="ml-6 sm:ml-8 mt-2 space-y-1">
-                      {item.subItems.map((subItem) => (
-                        <button
-                          key={subItem.label}
-                          onClick={() => handleMenuClick(subItem)}
-                          className={`w-full flex items-center space-x-3 py-2 px-3 text-left rounded-md transition-all duration-300 ${
-                            currentPage === subItem.page
-                              ? 'text-red-500 bg-red-500/10'
-                              : 'text-gray-300 hover:text-red-500 hover:bg-red-500/5'
-                          }`}
-                        >
-                          <subItem.icon className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                          <span className="font-medium text-xs sm:text-sm">{subItem.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-          </div>
-        )}
       </div>
 
       <style>{`

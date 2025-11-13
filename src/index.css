@@ -40,6 +40,39 @@ body {
   overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+  /* Reduce animations on mobile for better performance */
+  *, *::before, *::after {
+    animation-duration: 0.3s !important;
+    animation-delay: -0.3s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+    .hover\:scale-105:hover {
+      transform: none !important;
+    }
+    .hover\:shadow-3xl:hover {
+      box-shadow: none !important;
+    }
+  }
+
+  /* Optimize scrolling on mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Touch-friendly button sizes */
+@media (max-width: 768px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
 /* Basic reset for focus outlines for a cleaner look,
    but ensure accessibility with a custom focus style */
 *:focus {
@@ -54,22 +87,22 @@ body {
   color: #171717; /* Dark text for contrast */
 }
 
-/* Glitch effect keyframes */
+/* Glitch effect keyframes - optimized for performance */
 @keyframes glitch-skew {
   0% {
     transform: skewX(0deg);
   }
   20% {
-    transform: skewX(-5deg);
+    transform: skewX(-3deg); /* Reduced from -5deg */
   }
   40% {
-    transform: skewX(5deg);
+    transform: skewX(3deg); /* Reduced from 5deg */
   }
   60% {
-    transform: skewX(-5deg);
+    transform: skewX(-3deg); /* Reduced from -5deg */
   }
   80% {
-    transform: skewX(5deg);
+    transform: skewX(3deg); /* Reduced from 5deg */
   }
   100% {
     transform: skewX(0deg);
@@ -81,16 +114,16 @@ body {
     transform: translate(0, 0);
   }
   20% {
-    transform: translate(-2px, 2px);
+    transform: translate(-1px, 1px); /* Reduced from -2px, 2px */
   }
   40% {
-    transform: translate(-2px, -2px);
+    transform: translate(-1px, -1px); /* Reduced from -2px, -2px */
   }
   60% {
-    transform: translate(2px, 2px);
+    transform: translate(1px, 1px); /* Reduced from 2px, 2px */
   }
   80% {
-    transform: translate(2px, -2px);
+    transform: translate(1px, -1px); /* Reduced from 2px, -2px */
   }
   100% {
     transform: translate(0, 0);
@@ -150,33 +183,33 @@ body {
   animation-delay: 1s;
 }
 
-/* Custom glitchCycle keyframes moved from Hero.tsx */
+/* Custom glitchCycle keyframes moved from Hero.tsx - optimized for performance */
 @keyframes glitchCycle {
   0% {
     filter: 
-      drop-shadow(2px 2px 4px #cc3300)
-      brightness(110%);
+      drop-shadow(1px 1px 2px #cc3300) /* Reduced intensity */
+      brightness(105%); /* Reduced from 110% */
   }
   33% {
     filter: 
-      drop-shadow(-2px -2px 6px #000000)
-      contrast(120%);
+      drop-shadow(-1px -1px 3px #000000) /* Reduced intensity */
+      contrast(110%); /* Reduced from 120% */
   }
   66% {
     filter: 
-      drop-shadow(0 0 8px #ff4400)
-      sepia(80%);
+      drop-shadow(0 0 4px #ff4400) /* Reduced intensity */
+      sepia(60%); /* Reduced from 80% */
   }
   100% {
     filter: 
-      drop-shadow(2px 2px 4px #cc3300)
-      brightness(110%);
+      drop-shadow(1px 1px 2px #cc3300) /* Reduced intensity */
+      brightness(105%); /* Reduced from 110% */
   }
 }
 
-/* Custom utility class for glitch effect */
+/* Custom utility class for glitch effect - reduced animation duration */
 .animate-glitch-effect {
-  animation: glitchCycle 2.4s infinite;
+  animation: glitchCycle 3s infinite; /* Increased from 2.4s to reduce frequency */
 }
 
 /* Custom utility for transform-style */
@@ -187,4 +220,124 @@ body {
 /* Custom utility for will-change */
 .will-change-transform-filter {
   will-change: transform, filter;
+}
+
+/* Metallic Text Effects - optimized animations */
+.metallic-text-red {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52, #dc4545, #c53030);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 5px rgba(197, 48, 48, 0.3)); /* Reduced intensity */
+  animation: metallic-shine 4s ease-in-out infinite; /* Slower animation */
+}
+
+.metallic-text-gold {
+  background: linear-gradient(135deg, #ffd700, #ffed4e, #f1c40f, #d4af37);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3)); /* Reduced intensity */
+  animation: metallic-shine 4s ease-in-out infinite; /* Slower animation */
+}
+
+.metallic-text-silver {
+  background: linear-gradient(135deg, #c0c0c0, #e8e8e8, #f5f5f5, #a8a8a8);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 5px rgba(192, 192, 192, 0.3)); /* Reduced intensity */
+  animation: metallic-shine 4s ease-in-out infinite; /* Slower animation */
+}
+
+.metallic-text-subtitle {
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e0, #94a3b8, #64748b);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 4px rgba(148, 163, 184, 0.2)); /* Reduced intensity */
+  animation: metallic-shine 5s ease-in-out infinite; /* Slower animation */
+}
+
+.metallic-text-logo {
+  background: linear-gradient(135deg, #ffffff, #f8fafc, #e2e8f0, #cbd5e0, #94a3b8);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3)) drop-shadow(0 0 15px rgba(148, 163, 184, 0.2)); /* Reduced intensity */
+  animation: metallic-logo-shine 4s ease-in-out infinite; /* Slower animation */
+}
+
+@keyframes metallic-shine {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes metallic-logo-shine {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+/* Metallic Button Effects - optimized for performance */
+.metallic-button-red {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease; /* Added transition for smooth hover */
+}
+
+.metallic-button-red::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); /* Reduced intensity */
+  transition: left 0.4s; /* Slower transition */
+  border-radius: inherit;
+}
+
+.metallic-button-red:hover::before {
+  left: 100%;
+}
+
+.metallic-button-silver {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease; /* Added transition for smooth hover */
+}
+
+.metallic-button-silver::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); /* Reduced intensity */
+  transition: left 0.4s; /* Slower transition */
+  border-radius: inherit;
+}
+
+.metallic-button-silver:hover::before {
+  left: 100%;
 }

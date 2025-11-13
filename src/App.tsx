@@ -1,18 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Hero from './components/Hero';
-import AboutUs from './components/AboutUs';
-import WhyChooseRotate from './components/WhyChooseRotate';
-import DemoSubmissions from './components/DemoSubmissions';
-import MeetTheTeam from './components/MeetTheTeam';
-import WorkAtRT8 from './components/WorkAtRT8';
-import LabelsOnRotate from './components/LabelsOnRotate';
-import Background3D from './components/Background3D';
+import { useState, useEffect, Suspense, lazy, useRef } from 'react';
+import PillHeader from './components/PillHeader';
 import Footer from './components/Footer';
 import SEOHead from './components/SEOHead';
+import LoadingScreen from './components/LoadingScreen';
+import SplashScreen from './components/SplashScreen';
+import { performanceMonitor } from './utils/performance';
+import Background from './components/Background'; // Import the Background component
+
+// Lazy load components for code splitting
+const Hero = lazy(() => import('./components/Hero'));
+const AboutUs = lazy(() => import('./components/AboutUs'));
+const WhyChooseRotate = lazy(() => import('./components/WhyChooseRotate'));
+const DemoSubmissions = lazy(() => import('./components/DemoSubmissions'));
+const MeetTheTeam = lazy(() => import('./components/MeetTheTeam'));
+const WorkAtRT8 = lazy(() => import('./components/WorkAtRT8'));
+const LabelsOnRotate = lazy(() => import('./components/LabelsOnRotate'));
+
+// Preload all components
+const preloadComponents = () => {
+  return Promise.all([
+    import('./components/Hero'),
+    import('./components/AboutUs'),
+    import('./components/WhyChooseRotate'),
+    import('./components/DemoSubmissions'),
+    import('./components/MeetTheTeam'),
+    import('./components/WorkAtRT8'),
+    import('./components/LabelsOnRotate')
+  ]);
+};
+
+// Loading component with skeleton
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="text-center">
+      <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <div className="text-white text-lg font-medium">Loading RT8...</div>
+      <div className="text-textSecondary text-sm mt-2">Preparing the experience</div>
+    </div>
+  </div>
+);
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const [isMobile, setIsMobile] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
+  const [appReady, setAppReady] = useState(false);
+  const [componentsPreloaded, setComponentsPreloaded] = useState(false);
+  const preloadAttemptedRef = useRef(false);
+
+  // Detect mobile devices and reduced motion preference for performance optimization
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768 ||
+                    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsMobile(mobile);
+    };
+    
+    const checkReducedMotion = () => {
+      setPrefersReducedMotion(performanceMonitor.prefersReducedMotion());
+    };
+
+    checkMobile();
+    checkReducedMotion();
+    window.addEventListener('resize', checkMobile);
+    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', checkReducedMotion);
+
+    // Performance monitoring
+    performanceMonitor.logPerformance();
+    console.log('Device capabilities:', performanceMonitor.getDeviceCapabilities());
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.matchMedia('(prefers-reduced-motion: reduce)').removeEventListener('change', checkReducedMotion);
+    };
+  }, []);
 
   // Handle URL routing
   useEffect(() => {
@@ -36,6 +99,22 @@ function App() {
     };
   }, []);
 
+  // Preload all components during loading screen
+  useEffect(() => {
+    if (showLoading && !preloadAttemptedRef.current) {
+      preloadAttemptedRef.current = true;
+      preloadComponents()
+        .then(() => {
+          setComponentsPreloaded(true);
+        })
+        .catch((error) => {
+          console.error('Failed to preload components:', error);
+          // Still mark as preloaded to avoid blocking the app
+          setComponentsPreloaded(true);
+        });
+    }
+  }, [showLoading]);
+
   // Update URL when page changes
   const handlePageChange = (page: string) => {
     setCurrentPage(page);
@@ -46,10 +125,24 @@ function App() {
     }
   };
 
+  // Handle splash screen completion
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+    setShowLoading(true);
+  };
+
+  // Handle loading completion
+  const handleLoadingComplete = () => {
+    // Only complete loading when components are preloaded
+    if (componentsPreloaded) {
+      setShowLoading(false);
+      setAppReady(true);
+    }
+  };
+
   // SEO configuration for each page
   const getSEOConfig = () => {
     const baseUrl = 'https://rt8.co.za/';
-    const baseImage = 'https://lh3.googleusercontent.com/yFVeryzwIrbTwz-cXHACgA_yZp6DTB9Yw9LqJE6C8bgnZhudye1kaFpYSFIu8iprueGV0mylNlovBA=s265-w265-h265';
     
     switch (currentPage) {
       case 'about':
@@ -125,17 +218,35 @@ function App() {
 
   const seoConfig = getSEOConfig();
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white overflow-x-hidden relative">
-      <SEOHead {...seoConfig} />
-      <Background3D />
-      <div className="relative z-10">
-        <Header currentPage={currentPage} setCurrentPage={handlePageChange} />
-        <div className="px-2 sm:px-4">
-          {renderPage()}
-        </div>
-        <Footer />
+  // Show splash screen first
+  if (showSplash) {
+    return (
+      <div className="min-h-screen text-white overflow-x-hidden">
+        <SplashScreen onSplashComplete={handleSplashComplete} />
       </div>
+    );
+  }
+
+  // Show loading screen while app is initializing and preloading components
+  if (showLoading) {
+    return (
+      <div className="min-h-screen text-white overflow-x-hidden">
+        <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen text-white overflow-x-hidden">
+      <SEOHead {...seoConfig} />
+      <Background /> {/* Add the background component */}
+      <PillHeader currentPage={currentPage} setCurrentPage={handlePageChange} />
+      <div className="px-2 sm:px-4 pt-20 sm:pt-24 md:pt-28 relative z-10">
+        <Suspense fallback={<LoadingFallback />}>
+          {renderPage()}
+        </Suspense>
+      </div>
+      <Footer />
     </div>
   );
 }

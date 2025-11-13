@@ -75,17 +75,7 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       transformStyle: 'preserve-3d', 
       animation: 'rotate 20s infinite linear'
     }}>
-      {/* Image 1 */}
-      <img 
-        src="https://lh3.googleusercontent.com/C33LKW6KroJHVsZ7HK4r5g0w_zC46hPyFqZSNjiZcKEv5AwtSjvevKblk6bULAh0zbBnvRFzd7oPxS1dlQ=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
-        style={{ 
-          transform: 'rotateY(0deg) translateZ(350px) translate(-50%, -50%)',
-          transformOrigin: 'center',
-          backfaceVisibility: 'hidden'
-        }}
-        alt="Sound We Found"
-      />
+     
       {/* Image 2 */}
       <img 
         src="https://lh3.googleusercontent.com/Lr4kwuVfBE9TR1u7nuOTpQxFH2isZvd_-9ZRoPkuxYSRTdH7MGlH9qH7h4EbhsIs7dBGKht0WFGd8oaTOA=s265-w265-h265 " 
@@ -185,17 +175,8 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
         }}
         alt="Taijitu"
       />
-      {/* Image 11 */}
-      <img 
-        src="https://lh3.googleusercontent.com/cH05ryJusZme61y6iZPt1sTGqd6hfw40nTFJsPdtY1jaHWgnFX2pMN9U_sN9ENRCd5Hj-HpNvbkJ8DHZMA=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
-        style={{ 
-          transform: 'rotateY(276.9deg) translateZ(350px) translate(-50%, -50%)',
-          transformOrigin: 'center',
-          backfaceVisibility: 'hidden'
-        }}
-        alt="bundoodoof"
-      />
+    
+
       {/* Image 12 */}
       <img 
         src="https://lh3.googleusercontent.com/eLaVo1OaCfrvteZl5BTlyNsjcGk5gnzpcf9I5ZOcWUU_XjtSA1GtTQJ9GewVqHqVF5slz5LgdSqWfVPVOg=s265-w265-h265 " 

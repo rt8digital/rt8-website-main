@@ -1,0 +1,66 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - heading "RT8 ROTATE GROUP" [level=1] [ref=e8]:
+      - generic "RT8 ROTATE GROUP" [ref=e10]:
+        - generic [ref=e11]: R
+        - generic [ref=e12]: T
+        - generic [ref=e13]: "8"
+        - generic [ref=e14]: R
+        - generic [ref=e15]: O
+        - generic [ref=e16]: T
+        - generic [ref=e17]: A
+        - generic [ref=e18]: T
+        - generic [ref=e19]: E
+        - generic [ref=e20]: G
+        - generic [ref=e21]: R
+        - generic [ref=e22]: O
+        - generic [ref=e23]: U
+        - generic [ref=e24]: P
+    - generic "Loading experience..." [ref=e27]:
+      - generic [ref=e28]: L
+      - generic [ref=e29]: o
+      - generic [ref=e30]: a
+      - generic [ref=e31]: d
+      - generic [ref=e32]: i
+      - generic [ref=e33]: "n"
+      - generic [ref=e34]: g
+      - generic [ref=e35]: e
+      - generic [ref=e36]: x
+      - generic [ref=e37]: p
+      - generic [ref=e38]: e
+      - generic [ref=e39]: r
+      - generic [ref=e40]: i
+      - generic [ref=e41]: e
+      - generic [ref=e42]: "n"
+      - generic [ref=e43]: c
+      - generic [ref=e44]: e
+      - generic [ref=e45]: .
+      - generic [ref=e46]: .
+      - generic [ref=e47]: .
+  - generic [ref=e50]: 81%
+  - generic "Preparing interface..." [ref=e53]:
+    - generic [ref=e54]: P
+    - generic [ref=e55]: r
+    - generic [ref=e56]: e
+    - generic [ref=e57]: p
+    - generic [ref=e58]: a
+    - generic [ref=e59]: r
+    - generic [ref=e60]: i
+    - generic [ref=e61]: "n"
+    - generic [ref=e62]: g
+    - generic [ref=e63]: i
+    - generic [ref=e64]: "n"
+    - generic [ref=e65]: t
+    - generic [ref=e66]: e
+    - generic [ref=e67]: r
+    - generic [ref=e68]: f
+    - generic [ref=e69]: a
+    - generic [ref=e70]: c
+    - generic [ref=e71]: e
+    - generic [ref=e72]: .
+    - generic [ref=e73]: .
+    - generic [ref=e74]: .
+```
