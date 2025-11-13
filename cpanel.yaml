@@ -1,0 +1,76 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/rt8codai/public_html/
+    - export BUILDPATH=/home/rt8codai/staging/
+    - /bin/cp -R dist/* $DEPLOYPATH
+    - /bin/rm -rf $BUILDPATH*
+
+# Application configuration
+application:
+  name: "RT8 Rotate Group Website"
+  version: "1.0.0"
+  type: "nodejs"
+  framework: "vite"
+  build_command: "npm run build"
+  output_directory: "dist"
+  environment_variables:
+    NODE_ENV: "production"
+    VITE_APP_ENV: "production"
+
+# Node.js configuration
+nodejs:
+  version: "18"
+  startup_file: "server.js"
+  app_root: "/home/rt8codai/public_html"
+
+# Deployment settings
+deployments:
+  - name: "production"
+    branch: "main"
+    auto_swap: true
+    rollback_enabled: true
+    rollback_on_failure: true
+
+# Cron jobs (if needed)
+cron:
+  - name: "sitemap-generator"
+    schedule: "0 2 * * *"
+    command: "cd /home/rt8codai/public_html && node scripts/generate-sitemap.js"
+    enabled: false
+
+# File permissions
+permissions:
+  - path: "/home/rt8codai/public_html"
+    mode: "0755"
+    recursive: true
+  - path: "/home/rt8codai/public_html/dist"
+    mode: "0644"
+    recursive: true
+
+# Security settings
+security:
+  https_redirect: true
+  ssl_enabled: true
+  headers:
+    - name: "X-Content-Type-Options"
+      value: "nosniff"
+    - name: "X-Frame-Options"
+      value: "DENY"
+    - name: "X-XSS-Protection"
+      value: "1; mode=block"
+
+# Performance settings
+performance:
+  gzip_compression: true
+  cache_control:
+    - path: "*.css"
+      value: "public, max-age=31536000"
+    - path: "*.js"
+      value: "public, max-age=31536000"
+    - path: "*.png"
+      value: "public, max-age=2592000"
+    - path: "*.jpg"
+      value: "public, max-age=2592000"
+    - path: "*.ico"
+      value: "public, max-age=2592000"
