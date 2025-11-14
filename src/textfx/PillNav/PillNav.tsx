@@ -10,7 +10,8 @@ import {
   Users,
   Briefcase,
   Building2,
-  ChevronDown
+  ChevronDown,
+  Home
 } from 'lucide-react';
 
 export type PillNavItem = {
@@ -49,7 +50,8 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   Heart,
   Users,
   Briefcase,
-  Building2
+  Building2,
+  HOME: Home
 };
 
 const PillNav: React.FC<PillNavProps> = ({
@@ -78,19 +80,19 @@ const PillNav: React.FC<PillNavProps> = ({
     }
   }, [initialLoadAnimation, ease]);
 
-  const handleMouseEnter = (itemLabel: string) => {
+  const handleMouseEnter = (label: string) => {
     // Clear any pending close timeout
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
-    const item = items.find(i => i.label === itemLabel);
+    const item = items.find(i => i.label === label);
     if (item?.subItems) {
-      setActiveDropdown(itemLabel);
+      setActiveDropdown(label);
     }
   };
 
-  const handleMouseLeave = (itemLabel: string) => {
+  const handleMouseLeave = () => {
     // Delay closing the dropdown to allow mouse to move to dropdown menu
     closeTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
@@ -139,7 +141,7 @@ const PillNav: React.FC<PillNavProps> = ({
             <div key={item.label} className="relative">
               <button
                 onMouseEnter={() => handleMouseEnter(item.label)}
-                onMouseLeave={() => handleMouseLeave(item.label)}
+                onMouseLeave={() => handleMouseLeave()}
                 onClick={() => handlePillClick(item)}
                 className={`relative px-4 py-2 rounded-full font-medium text-sm transition-all duration-200 flex items-center space-x-2 ${ // Reduced from 300ms to 200ms
                   isActive(item.href)

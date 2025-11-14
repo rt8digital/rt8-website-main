@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Music, Users, Award, Globe, Target, Lightbulb } from 'lucide-react';
+import { Music, Target, Lightbulb } from 'lucide-react';
 import ScrambledText from './textfx/ScrambledText/ScrambledText';
+
+interface Slide {
+  src: string;
+  alt: string;
+  href?: string;
+}
 
 interface AboutUsProps {
   setCurrentPage: (page: string) => void;
@@ -8,38 +14,37 @@ interface AboutUsProps {
 
 const AboutUs: React.FC<AboutUsProps> = ({ setCurrentPage }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const containerRef = useRef<HTMLElement>(null);
+
+  const slides: Slide[] = [
+    {
+      src: 'https://lh3.googleusercontent.com/0cwc6C59JR6o4On9YAolXsSHij51xwGLy6ZgOIze8svASE4gwzA7hqejdEbmxDG4U6UmLMcuX_IWR7rsGg=s265-w265-h265',
+      alt: 'Digital Services',
+      href: 'https://digital.rt8.co.za'
+    },
+    {
+      src: 'https://lh3.googleusercontent.com/t9c3eGE-Bzdgm4iLuNC1i7kLp5DurIXJd-_7DsVNOh4k8R2sdxFUxLEzKpiUUAKXWeKoWOZ6k5gDbo21FA=s265-w265-h265',
+      alt: 'RT8 Services'
+    },
+    {
+      src: 'https://lh3.googleusercontent.com/VhSDOZfgu2krNvuCpf0BPlvcI7g40XW3zSAKMxua55129FeVAOwBmlrY2nXuZkjvYMQ3bY1wTrcx_uzJQQ=s265-w265-h265',
+      alt: 'Music Services',
+      href: 'https://music.rt8.co.za'
+    }
+  ];
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  const stats = [
-    {
-      icon: Music,
-      value: '500+',
-      label: 'Releases',
-      description: 'High-quality music releases across all genres'
-    },
-    {
-      icon: Users,
-      value: '200+',
-      label: 'Artists',
-      description: 'Talented musicians in our network'
-    },
-    {
-      icon: Award,
-      value: '15+',
-      label: 'Labels',
-      description: 'Partner labels using our infrastructure'
-    },
-    {
-      icon: Globe,
-      value: '50+',
-      label: 'Countries',
-      description: 'Global reach and distribution'
-    }
-  ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   const values = [
     {
@@ -146,78 +151,41 @@ const AboutUs: React.FC<AboutUsProps> = ({ setCurrentPage }) => {
                 </ScrambledText>
               </div>
               <div className="relative">
-                <img 
-                  src="https://lh3.googleusercontent.com/dcZeSl1IXpMiiE1J9hswAaQvsUcQglhNgtLJFxaG-SrFXzs7QWIejba0YS0oWGBItFelWCcfdT4L0KLoJg=s265-w265-h265"
-                  alt="Music Studio"
-                  className="w-full h-40 sm:h-52 object-cover rounded-lg" // Reduced height
-                />
+                {slides[currentSlide].href ? (
+                  <a href={slides[currentSlide].href} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={slides[currentSlide].src}
+                      alt={slides[currentSlide].alt}
+                      className="w-full h-40 sm:h-52 object-cover rounded-lg cursor-pointer transition-all duration-500 hover:scale-105"
+                    />
+                  </a>
+                ) : (
+                  <img
+                    src={slides[currentSlide].src}
+                    alt={slides[currentSlide].alt}
+                    className="w-full h-40 sm:h-52 object-cover rounded-lg transition-all duration-500"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-red-500/20 to-transparent rounded-lg"></div>
+                {/* Slide indicators */}
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        index === currentSlide ? 'bg-red-500' : 'bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Stats Section */}
-        <div className={`mb-6 sm:mb-12 transition-all duration-1000 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <ScrambledText
-            as="span"
-            radius={80}
-            duration={1.0}
-            speed={0.4}
-            scrambleChars=".:"
-            className="text-lg sm:text-2xl font-bold text-center text-white mb-4 sm:mb-8 mobile-heading" // Reduced text sizes
-          >
-            Our Impact
-          </ScrambledText>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4"> {/* Reduced gap */}
-            {stats.map((stat, index) => (
-              <div 
-                key={stat.label}
-                className={`text-center mobile-card rounded-lg p-2.5 sm:p-4 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 ${ // Reduced padding
-                  isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${500 + index * 80}ms` }} // Reduced delay
-              >
-                <div className="w-7 h-7 sm:w-10 sm:h-10 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-1.5 sm:mb-3"> {/* Reduced size and margins */}
-                  <stat.icon className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-red-500" /> {/* Reduced icon size */}
-                </div>
-                <ScrambledText
-                  as="div"
-                  radius={50}
-                  duration={0.6}
-                  speed={0.4}
-                  scrambleChars=".:"
-                  className="text-lg sm:text-2xl font-bold text-white mb-1 sm:mb-1.5" // Reduced text sizes
-                >
-                  {stat.value}
-                </ScrambledText>
-                <ScrambledText
-                  as="div"
-                  radius={50}
-                  duration={0.6}
-                  speed={0.4}
-                  scrambleChars=".:"
-                  className="text-red-500 font-semibold mb-1 text-xs sm:text-sm" // Reduced text sizes
-                >
-                  {stat.label}
-                </ScrambledText>
-                <ScrambledText
-                  as="p"
-                  radius={40}
-                  duration={0.6}
-                  speed={0.4}
-                  scrambleChars=".:"
-                  className="text-gray-400 text-xs" // Reduced text size
-                >
-                  {stat.description}
-                </ScrambledText>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Mission, Vision, Values */}
-        <div className={`mb-6 sm:mb-12 transition-all duration-1000 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`mb-6 sm:mb-12 transition-all duration-1000 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="grid md:grid-cols-3 gap-3 sm:gap-6"> {/* Reduced gap */}
             {values.map((value, index) => (
               <div 
@@ -256,7 +224,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ setCurrentPage }) => {
         </div>
 
         {/* What We Do */}
-        <div className={`mb-6 sm:mb-12 transition-all duration-1000 delay-800 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`mb-6 sm:mb-12 transition-all duration-1000 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="mobile-card rounded-lg p-3 sm:p-6"> {/* Reduced padding */}
             <ScrambledText
               as="span"
@@ -404,7 +372,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ setCurrentPage }) => {
         </div>
 
         {/* Call to Action */}
-        <div className={`text-center transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`text-center transition-all duration-1000 delay-800 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <ScrambledText
             radius={80}
             duration={1.0}

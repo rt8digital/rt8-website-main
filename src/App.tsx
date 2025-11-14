@@ -3,7 +3,6 @@ import PillHeader from './components/PillHeader';
 import Footer from './components/Footer';
 import SEOHead from './components/SEOHead';
 import LoadingScreen from './components/LoadingScreen';
-import SplashScreen from './components/SplashScreen';
 
 // Removed Background import since we're removing animated backgrounds
 
@@ -42,8 +41,7 @@ const LoadingFallback = () => (
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const [showSplash, setShowSplash] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
   const [componentsPreloaded, setComponentsPreloaded] = useState(false);
   const preloadAttemptedRef = useRef(false);
 
@@ -95,12 +93,6 @@ function App() {
     } else {
       window.location.hash = `#/${page}`;
     }
-  };
-
-  // Handle splash screen completion
-  const handleSplashComplete = () => {
-    setShowSplash(false);
-    setShowLoading(true);
   };
 
   // Handle loading completion
@@ -189,15 +181,6 @@ function App() {
 
   const seoConfig = getSEOConfig();
 
-  // Show splash screen first
-  if (showSplash) {
-    return (
-      <div className="min-h-screen text-white overflow-x-hidden">
-        <SplashScreen onSplashComplete={handleSplashComplete} />
-      </div>
-    );
-  }
-
   // Show loading screen while app is initializing and preloading components
   if (showLoading) {
     return (
@@ -212,6 +195,8 @@ function App() {
       <SEOHead {...seoConfig} />
       {/* Removed animated background component to keep it simple */}
       <PillHeader currentPage={currentPage} setCurrentPage={handlePageChange} />
+
+
       <div className="px-2 sm:px-4 pt-20 sm:pt-24 md:pt-28 relative z-10">
         <Suspense fallback={<LoadingFallback />}>
           {renderPage()}
