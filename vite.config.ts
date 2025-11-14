@@ -20,6 +20,22 @@ export default defineConfig({
           // Separate router
           'router-vendor': ['react-router-dom'],
         },
+        // Ensure assets like SVGs have proper naming
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'assets/[name].[hash].[ext]';
+          }
+          if (assetInfo.name?.endsWith('.svg')) {
+            return 'assets/icons/[name].[hash].[ext]';
+          }
+          if (assetInfo.name?.endsWith('.png') || assetInfo.name?.endsWith('.jpg') || assetInfo.name?.endsWith('.jpeg') || assetInfo.name?.endsWith('.gif')) {
+            return 'assets/images/[name].[hash].[ext]';
+          }
+          if (assetInfo.name?.endsWith('.woff') || assetInfo.name?.endsWith('.woff2') || assetInfo.name?.endsWith('.ttf')) {
+            return 'assets/fonts/[name].[hash].[ext]';
+          }
+          return 'assets/[name].[hash].[ext]';
+        },
       },
     },
     // Enable source maps for better debugging
@@ -38,11 +54,15 @@ export default defineConfig({
       format: {
         comments: false
       }
-    }
+    },
+    // Ensure assets are copied to dist folder
+    assetsDir: 'assets',
   },
   server: {
     hmr: {
       overlay: false
     }
-  }
+  },
+  // Asset handling
+  assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.woff', '**/*.woff2'],
 });

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PillNav from '../textfx/PillNav/PillNav';
-import VariableProximity from '../textfx/VariableProximity/VariableProximity';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faInstagram,

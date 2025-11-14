@@ -46,23 +46,23 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative pt-32 pb-32">
-      <div className="max-w-6xl mx-auto px-4">
+    <section className="min-h-screen flex items-center justify-center relative pt-24 pb-24"> {/* Reduced padding */}
+      <div className="max-w-5xl mx-auto px-4"> {/* Reduced max-width */}
         {/* Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+        <div className={`text-center mb-12 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4"> {/* Reduced text sizes */}
             <span className="text-white">WHY CHOOSE</span>
-            <span className="text-red-500 ml-4">ROTATE</span>
+            <span className="text-red-500 ml-3">ROTATE</span> {/* Reduced margin */}
           </h1>
-          <div className="w-24 h-1 bg-red-500 mx-auto mb-8"></div>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <div className="w-20 h-1 bg-red-500 mx-auto mb-6"></div> {/* Reduced width and margin */}
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"> {/* Reduced text size and max-width */}
             At RT8, we masterfully blend audacious creative vision with groundbreaking tech innovation to empower artists, labels, and businesses with an all-encompassing arsenal for success—from seamless administrative and expert management support to bespoke digital tools. Our driving force? A passionate mission to revolutionize industries and uplift communities worldwide.
           </p>
         </div>
 
         {/* Labels Infrastructure Text */}
-        <div className={`text-center mb-8 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+        <div className={`text-center mb-6 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-3"> {/* Reduced text sizes */}
             These brands are on ROTATE:
           </h2>
         </div>
@@ -70,7 +70,7 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
         {/* 3D Rotating Carousel with Reduced Height */}
         {/* 3D Rotating Carousel with Reduced Height */}
 <div className={`transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-  <div className="carousel-container relative w-full max-w-3xl mx-auto mb-12" style={{ perspective: '1200px', height: '350px' }}>
+  <div className="carousel-container relative w-full max-w-2xl mx-auto mb-10" style={{ perspective: '1200px', height: '300px' }}> {/* Reduced max-width and margin */}
     <div className="image-container absolute w-full h-full" style={{ 
       transformStyle: 'preserve-3d', 
       animation: 'rotate 20s infinite linear'
@@ -79,9 +79,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 2 */}
       <img 
         src="https://lh3.googleusercontent.com/Lr4kwuVfBE9TR1u7nuOTpQxFH2isZvd_-9ZRoPkuxYSRTdH7MGlH9qH7h4EbhsIs7dBGKht0WFGd8oaTOA=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(27.69deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(27.69deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -90,9 +90,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 3 */}
       <img 
         src="https://lh3.googleusercontent.com/mZ5dzkN4DMAl7EzMZkpsh4mNtPJt2WOeAMy8_qSyo_blPlB_3jXrlDzI4_wwvoCV2f_Bbvlf-T0usV1ftQ=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(55.38deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(55.38deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -101,9 +101,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 4 */}
       <img 
         src="https://lh3.googleusercontent.com/vvOEacD4zVg38TLfyUPco3366qZ-su51n_qeSNrzcGWR3wQmempQ0jPU0RSYOFo30kf3ivRaiKqmJiGpyA=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(83.07deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(83.07deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -112,9 +112,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 5 */}
       <img 
         src="https://lh3.googleusercontent.com/B0Pu7sVfZ4IgpQaaDg0kW2Hb8VnrzO_yFP3ueTSK0mpGiafkPHBKGhptBlVkZFsV_CuDDg6dhtd821c_zw=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(110.76deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(110.76deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -123,9 +123,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 6 */}
       <img 
         src="https://lh3.googleusercontent.com/9_BsaqR9XoF0t8nfXQ4RpdvjBt2Djo3q7rZUAU-lB82MUSjwJoZHcYBYYxutMAKefapF8ivhzEgVoLYgmQ=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(138.45deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(138.45deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -134,9 +134,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 7 */}
       <img 
         src="https://lh3.googleusercontent.com/jShwO7ahNi_6cQDF9uowMTUtYWu12qciCY27RLD36Klxtj2viSX3vZjgUriy1HT7d85LpoZZN8_KYZ9gew=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(166.14deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(166.14deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -145,9 +145,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 8 */}
       <img 
         src="https://lh3.googleusercontent.com/Nj1NV_fWy9DCYyv9p3lK7oBm12qdfW4cUzyxgmG6x2gd2G9vMdQtBXqmRPcj1BLFDBd0w-yNGGBMUyJIEg=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(193.83deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(193.83deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -156,9 +156,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 9 */}
       <img 
         src="https://lh3.googleusercontent.com/UXtc9gdr80-9lIqXm0VZ90--6Q23QvMhBIl6C3oK4zUGWvpxbIrkl1vZ9RPd914IBM_nzBiU9y82wvSAgQ=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(221.52deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(221.52deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -167,22 +167,21 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 10 */}
       <img 
         src="https://lh3.googleusercontent.com/5K-qStJ_WhQxUFOOhs0eT6vBUlurdfgoJifPwyH330DBf78nhhXMCdoyK_dsIrEOMonRsl6A5yG3YN321A=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(249.21deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(249.21deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
         alt="Taijitu"
       />
     
-
       {/* Image 12 */}
       <img 
         src="https://lh3.googleusercontent.com/eLaVo1OaCfrvteZl5BTlyNsjcGk5gnzpcf9I5ZOcWUU_XjtSA1GtTQJ9GewVqHqVF5slz5LgdSqWfVPVOg=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(304.59deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(304.59deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -191,9 +190,9 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
       {/* Image 13 */}
       <img 
         src="https://lh3.googleusercontent.com/VM9swFwNcL2fWy_3xpfUKhLQg2klUpz509oifNDdQCnMCVeTWdXlE9gX-T8YE5o8Idk_OCwlWA4yNzEIFg=s265-w265-h265 " 
-        className="carousel-image absolute w-40 h-40 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" 
+        className="carousel-image absolute w-32 h-32 top-1/2 left-1/2 cursor-pointer transition-all duration-300 hover:scale-110" /* Reduced size */
         style={{ 
-          transform: 'rotateY(332.28deg) translateZ(350px) translate(-50%, -50%)',
+          transform: 'rotateY(332.28deg) translateZ(300px) translate(-50%, -50%)', /* Reduced Z translation */
           transformOrigin: 'center',
           backfaceVisibility: 'hidden'
         }}
@@ -205,133 +204,139 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
 
         {/* Testimonials Section */}
         <div className={`transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="max-h-96 overflow-y-auto p-4 bg-black/20 backdrop-blur-md rounded-lg border border-red-500/20 mb-16">
-            <h2 className="text-red-500 text-2xl font-bold text-center mb-6">
+          <div className="max-h-80 overflow-y-auto p-3 bg-black/20 backdrop-blur-md rounded-lg border border-red-500/20 mb-12"> {/* Reduced max-height and padding */}
+            <h2 className="text-red-500 text-xl font-bold text-center mb-4"> {/* Reduced text size and margin */}
               Here is what people say about Rotate
             </h2>
 
             {/* First Review */}
-            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-4 mb-4">
+            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-3 mb-3"> {/* Reduced padding and margin */}
               <a 
-                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-3 py-2 rounded-lg mb-3 hover:bg-black/80 transition-colors duration-300" 
+                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-2.5 py-1.5 rounded-lg mb-2 hover:bg-black/80 transition-colors duration-300" /* Reduced padding */
                 href="https://www.labelradar.com/artists/Freddyavila/profile"
               >
                 <img 
-                  className="w-10 h-10 rounded-full mr-3 object-cover" 
+                  className="w-8 h-8 rounded-full mr-2.5 object-cover" /* Reduced size and margin */
                   src="https://d3tmwgb5526rcg.cloudfront.net/pictures/11855f52-8d42-4b2a-8747-2d5a87ff9a8d.jpeg" 
                   alt="OWASSA avatar" 
                 />
-                <span className="font-bold mr-1">OWASSA</span>
-                <span className="text-gray-400">(/Freddyavila)</span>
+                <span className="font-bold mr-1 text-sm">OWASSA</span> {/* Reduced text size */}
+                <span className="text-gray-400 text-xs">(/Freddyavila)</span> {/* Reduced text size */}
               </a>
-              <p className="text-white mb-2">
+              <p className="text-white mb-1.5 text-sm"> {/* Reduced text size and margin */}
                 Always great communication and great staffing.
               </p>
-              <small className="text-gray-400">- LABEL RADAR</small>
+              <small className="text-gray-400 text-xs">- LABEL RADAR</small> {/* Reduced text size */}
             </div>
 
             {/* Second Review */}
-            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-4 mb-4">
+            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-3 mb-3"> {/* Reduced padding and margin */}
               <a 
-                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-3 py-2 rounded-lg mb-3 hover:bg-black/80 transition-colors duration-300" 
+                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-2.5 py-1.5 rounded-lg mb-2 hover:bg-black/80 transition-colors duration-300" /* Reduced padding */
                 href="https://www.labelradar.com/artists/FrequencyPhantom/profile"
               >
                 <img 
-                  className="w-10 h-10 rounded-full mr-3 object-cover" 
+                  className="w-8 h-8 rounded-full mr-2.5 object-cover" /* Reduced size and margin */
                   src="https://d3tmwgb5526rcg.cloudfront.net/pictures/952b0abc-7743-4150-971e-05413a3ff88a.jpg" 
                   alt="FrequencyPhantom avatar" 
                 />
-                <span className="font-bold mr-1">FrequencyPhantom</span>
-                <span className="text-gray-400">(/FrequencyPhantom)</span>
+                <span className="font-bold mr-1 text-sm">FrequencyPhantom</span> {/* Reduced text size */}
+                <span className="text-gray-400 text-xs">(/FrequencyPhantom)</span> {/* Reduced text size */}
               </a>
-              <p className="text-white mb-2">
+              <p className="text-white mb-1.5 text-sm"> {/* Reduced text size and margin */}
                 Currently in talks with them about signing 3 of my tracks. Very friendly and professional team—I've only talked to a few so far, but they've been great!
               </p>
-              <small className="text-gray-400">- LABEL RADAR</small>
+              <small className="text-gray-400 text-xs">- LABEL RADAR</small> {/* Reduced text size */}
             </div>
 
             {/* Third Review */}
-            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-4 mb-4">
+            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-3 mb-3"> {/* Reduced padding and margin */}
               <a 
-                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-3 py-2 rounded-lg mb-3 hover:bg-black/80 transition-colors duration-300" 
+                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-2.5 py-1.5 rounded-lg mb-2 hover:bg-black/80 transition-colors duration-300" /* Reduced padding */
                 href="https://www.google.com/maps/contrib/102679598114378926661/reviews?hl=en-GB" 
               >
                 <img 
-                  className="w-10 h-10 rounded-full mr-3 object-cover" 
+                  className="w-8 h-8 rounded-full mr-2.5 object-cover" /* Reduced size and margin */
                   src="https://lh3.googleusercontent.com/a-/ALV-UjUaxf6Oo17PHwnSiv9K4jAapAhLewWsGyOLBhVv8_4q3UTxRf4=s36-c-rp-mo-ba3-br100" 
                   alt="Khalil Singh avatar" 
                 />
-                <span className="font-bold">Khalil Singh</span>
+                <span className="font-bold text-sm">Khalil Singh</span> {/* Reduced text size */}
               </a>
-              <p className="text-white mb-2">
+              <p className="text-white mb-1.5 text-sm"> {/* Reduced text size and margin */}
                 As an artist, the support and effort made by the staff is exceptional! Will definitely be working with them more in the future!
               </p>
-              <small className="text-gray-400">- GOOGLE REVIEWS</small>
+              <small className="text-gray-400 text-xs">- GOOGLE REVIEWS</small> {/* Reduced text size */}
             </div>
 
             {/* Fourth Review */}
-            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-4 mb-4">
+            <div className="bg-black/40 backdrop-blur-md border border-red-500/10 rounded-lg p-3 mb-3"> {/* Reduced padding and margin */}
               <a 
-                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-3 py-2 rounded-lg mb-3 hover:bg-black/80 transition-colors duration-300" 
+                className="inline-flex items-center bg-black/60 text-green-400 font-bold px-2.5 py-1.5 rounded-lg mb-2 hover:bg-black/80 transition-colors duration-300" /* Reduced padding */
                 href="https://www.labelradar.com/artists/HZEID/profile"
               >
                 <img 
-                  className="w-10 h-10 rounded-full mr-3 object-cover" 
+                  className="w-8 h-8 rounded-full mr-2.5 object-cover" /* Reduced size and margin */
                   src="https://d3tmwgb5526rcg.cloudfront.net/pictures/ab3378a8-0e47-45fe-b8f8-c9906c0501d6.JPG" 
                   alt="Halim avatar" 
                 />
-                <span className="font-bold mr-1">Halim</span>
-                <span className="text-gray-400">(/HZEID)</span>
+                <span className="font-bold mr-1 text-sm">Halim</span> {/* Reduced text size */}
+                <span className="text-gray-400 text-xs">(/HZEID)</span> {/* Reduced text size */}
               </a>
-              <p className="text-white mb-2">
+              <p className="text-white mb-1.5 text-sm"> {/* Reduced text size and margin */}
                 I usually get offers from labels that include some hidden fees and payments, but from the first messages, they were clear about that - even without asking. Everything went smoothly with a great sense of professionalism and respect. Thank you! ❤️
               </p>
-              <small className="text-gray-400">- LABEL RADAR</small>
+              <small className="text-gray-400 text-xs">- LABEL RADAR</small> {/* Reduced text size */}
             </div>
           </div>
         </div>
 
         {/* Features Grid */}
         <div className={`transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl font-bold text-center text-white mb-12">What Drives Us</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="text-2xl font-bold text-center text-white mb-8"> {/* Reduced text size and margin */}
+            What Drives Us
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"> {/* Reduced gap */}
             {features.map((feature, index) => (
               <div 
                 key={feature.title}
-                className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-6 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 hover:bg-red-500/5 ${
+                className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-4 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 hover:bg-red-500/5 ${ // Reduced padding
                   isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                 }`}
-                style={{ transitionDelay: `${800 + index * 100}ms` }}
+                style={{ transitionDelay: `${700 + index * 80}ms` }} // Reduced delay
               >
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mr-4">
-                    <feature.icon className="w-6 h-6 text-red-500" />
+                <div className="flex items-center mb-3"> {/* Reduced margin */}
+                  <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center mr-3"> {/* Reduced size and margin */}
+                    <feature.icon className="w-5 h-5 text-red-500" /> {/* Reduced icon size */}
                   </div>
-                  <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                  <h3 className="text-lg font-semibold text-white">{feature.title}</h3> {/* Reduced text size */}
                 </div>
-                <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+                <p className="text-gray-300 leading-relaxed text-sm"> {/* Reduced text size */}
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Call to Action */}
-        <div className={`text-center mt-16 transition-all duration-1000 delay-900 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl font-bold text-white mb-6">Join Our Journey</h2>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+        <div className={`text-center mt-12 transition-all duration-1000 delay-900 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-2xl font-bold text-white mb-4"> {/* Reduced text size and margin */}
+            Join Our Journey
+          </h2>
+          <p className="text-gray-300 mb-6 max-w-xl mx-auto text-sm"> {/* Reduced text size, margin and max-width */}
             Ready to be part of something extraordinary? Connect with us and discover how we can 
             collaborate to create the next chapter in the evolution of art and innovation.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center"> {/* Reduced gap */}
             <button 
               onClick={() => window.location.href = 'https://music.rt8.co.za/'}
-              className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25"
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25 text-sm" // Reduced padding and text size
             >
               EXPLORE OUR MUSIC
             </button>
             <button 
               onClick={() => setCurrentPage('demo-submissions')}
-              className="border-2 border-white hover:border-red-500 text-white hover:text-red-500 px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              className="border-2 border-white hover:border-red-500 text-white hover:text-red-500 px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 text-sm" // Reduced padding and text size
             >
               SUBMIT YOUR DEMO
             </button>
@@ -339,20 +344,22 @@ const WhyChooseRotate: React.FC<WhyChooseRotateProps> = ({ setCurrentPage }) => 
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes rotate {
-          from {
-            transform: rotateY(0deg);
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes rotate {
+            from {
+              transform: rotateY(0deg);
+            }
+            to {
+              transform: rotateY(360deg);
+            }
           }
-          to {
-            transform: rotateY(360deg);
+          
+          .carousel-image:hover {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
           }
-        }
-        
-        .carousel-image:hover {
-          box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
-        }
-      `}</style>
+        `
+      }} />
     </section>
   );
 };

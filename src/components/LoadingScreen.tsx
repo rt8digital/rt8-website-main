@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ScrambledText from './textfx/ScrambledText/ScrambledText';
-import Balatro from './bkgfx/Balatro/Balatro';
+// Removed Balatro import since we're removing animated backgrounds
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
@@ -54,20 +54,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
     <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center transition-opacity duration-500 ${
       isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
     }`}>
-      {/* Balatro Background */}
-      <div className="absolute inset-0 z-0">
-        <Balatro 
-          isRotate={true} // Enable rotation for animated background
-          spinRotation={-2.0}
-          spinSpeed={7.0}
-          contrast={3.5}
-          lighting={0.4}
-          spinAmount={0.25}
-          pixelFilter={745.0}
-          spinEase={1.0}
-          mouseInteraction={true}
-        />
-      </div>
+      {/* Removed Balatro animated background to keep it simple */}
       
       {/* Semi-transparent overlay */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-0"></div>

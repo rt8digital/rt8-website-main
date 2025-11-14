@@ -4,8 +4,8 @@ import Footer from './components/Footer';
 import SEOHead from './components/SEOHead';
 import LoadingScreen from './components/LoadingScreen';
 import SplashScreen from './components/SplashScreen';
-import { performanceMonitor } from './utils/performance';
-import Background from './components/Background'; // Import the Background component
+
+// Removed Background import since we're removing animated backgrounds
 
 // Lazy load components for code splitting
 const Hero = lazy(() => import('./components/Hero'));
@@ -42,40 +42,12 @@ const LoadingFallback = () => (
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const [isMobile, setIsMobile] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [showLoading, setShowLoading] = useState(false);
-  const [appReady, setAppReady] = useState(false);
   const [componentsPreloaded, setComponentsPreloaded] = useState(false);
   const preloadAttemptedRef = useRef(false);
 
-  // Detect mobile devices and reduced motion preference for performance optimization
-  useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 768 ||
-                    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      setIsMobile(mobile);
-    };
-    
-    const checkReducedMotion = () => {
-      setPrefersReducedMotion(performanceMonitor.prefersReducedMotion());
-    };
 
-    checkMobile();
-    checkReducedMotion();
-    window.addEventListener('resize', checkMobile);
-    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', checkReducedMotion);
-
-    // Performance monitoring
-    performanceMonitor.logPerformance();
-    console.log('Device capabilities:', performanceMonitor.getDeviceCapabilities());
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-      window.matchMedia('(prefers-reduced-motion: reduce)').removeEventListener('change', checkReducedMotion);
-    };
-  }, []);
 
   // Handle URL routing
   useEffect(() => {
@@ -136,7 +108,6 @@ function App() {
     // Only complete loading when components are preloaded
     if (componentsPreloaded) {
       setShowLoading(false);
-      setAppReady(true);
     }
   };
 
@@ -239,7 +210,7 @@ function App() {
   return (
     <div className="min-h-screen text-white overflow-x-hidden">
       <SEOHead {...seoConfig} />
-      <Background /> {/* Add the background component */}
+      {/* Removed animated background component to keep it simple */}
       <PillHeader currentPage={currentPage} setCurrentPage={handlePageChange} />
       <div className="px-2 sm:px-4 pt-20 sm:pt-24 md:pt-28 relative z-10">
         <Suspense fallback={<LoadingFallback />}>

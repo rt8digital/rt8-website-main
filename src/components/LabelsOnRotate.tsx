@@ -20,8 +20,8 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
     mass: 1, // Reduced from 2
   };
 
-  const rotateAmplitude = 8; // Reduced from 12
-  const scaleOnHover = 1.02; // Reduced from 1.05
+  const rotateAmplitude = 6; // Reduced from 8
+  const scaleOnHover = 1.01; // Reduced from 1.02
 
   // Component for individual label card with tilt effect
   const LabelCard = ({ label, index }: { label: any, index: number }) => {
@@ -57,11 +57,11 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
     return (
       <motion.div
         ref={cardRef}
-        className={`relative flex flex-col rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer group ${
+        className={`relative flex flex-col rounded-[16px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer group ${
           label.featured ? 'ring-2 ring-red-500/30' : ''
         } ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
         style={{
-          transitionDelay: `${800 + index * 100}ms`,
+          transitionDelay: `${600 + index * 80}ms`, // Reduced delay
           background: 'linear-gradient(145deg,#EF4444,#000)',
           '--spotlight-color': 'rgba(255,255,255,0.3)',
           rotateX,
@@ -81,13 +81,13 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
           }}
         />
         {label.featured && (
-          <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
+          <div className="absolute top-3 right-3 bg-red-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold z-10"> {/* Reduced padding and position */}
             FEATURED
           </div>
         )}
 
         {/* Label Logo */}
-        <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-8" style={{ transform: 'translateZ(0)' }}>
+        <div className="relative h-40 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-6" style={{ transform: 'translateZ(0)' }}> {/* Reduced height and padding */}
           <img
             src={label.logo}
             alt={label.name}
@@ -97,21 +97,21 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
         </div>
 
         {/* Label Info */}
-        <div className="p-6" style={{ transform: 'translateZ(30px)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xl font-bold text-white">{label.name}</h3>
-            <span className="bg-red-500/20 text-red-500 px-3 py-1 rounded-full text-sm font-medium">
+        <div className="p-4" style={{ transform: 'translateZ(30px)' }}> {/* Reduced padding */}
+          <div className="flex items-center justify-between mb-2"> {/* Reduced margin */}
+            <h3 className="text-lg font-bold text-white">{label.name}</h3> {/* Reduced text size */}
+            <span className="bg-red-500/20 text-red-500 px-2.5 py-0.5 rounded-full text-xs font-medium"> {/* Reduced padding */}
               {label.genre}
             </span>
           </div>
 
-          <p className="text-gray-300 text-sm leading-relaxed mb-4">
+          <p className="text-gray-300 text-xs leading-relaxed mb-3"> {/* Reduced text size and margin */}
             {label.description}
           </p>
 
           {/* Label Stats */}
-          <div className="text-center mb-4">
-            <div className="text-white font-bold">{label.founded}</div>
+          <div className="text-center mb-3"> {/* Reduced margin */}
+            <div className="text-white font-bold text-sm">{label.founded}</div> {/* Reduced text size */}
             <div className="text-gray-400 text-xs">Founded</div>
           </div>
 
@@ -119,9 +119,9 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
           <div className="flex justify-center">
             <button
               onClick={() => window.location.href = label.instagram}
-              className="w-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
+              className="w-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-1.5 text-sm" // Reduced padding and text size
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-3.5 h-3.5" /> {/* Reduced icon size */}
               <span>Instagram</span>
             </button>
           </div>
@@ -286,45 +286,45 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative pt-32 pb-32">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="min-h-screen flex items-center justify-center relative pt-24 pb-24"> {/* Reduced padding */}
+      <div className="max-w-6xl mx-auto px-4"> {/* Reduced max-width */}
         {/* Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+        <div className={`text-center mb-12 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4"> {/* Reduced text sizes */}
             <span className="text-white">LABELS ON</span>
-            <span className="text-red-500 ml-4">ROTATE</span>
+            <span className="text-red-500 ml-3">ROTATE</span> {/* Reduced margin */}
           </h1>
-          <div className="w-24 h-1 bg-red-500 mx-auto mb-8"></div>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <div className="w-20 h-1 bg-red-500 mx-auto mb-6"></div> {/* Reduced width and margin */}
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"> {/* Reduced text size and max-width */}
             Discover the diverse ecosystem of music labels that benefit from RT8's innovative infrastructure. 
             Each label brings unique sounds and artistic vision to our collective mission.
           </p>
         </div>
 
         {/* Stats Section */}
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}> {/* Reduced gap and margin */}
           {stats.map((stat, index) => (
             <div 
               key={stat.label}
-              className={`text-center bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-6 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 ${
+              className={`text-center bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-4 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 ${ // Reduced padding
                 isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
-              style={{ transitionDelay: `${400 + index * 100}ms` }}
+              style={{ transitionDelay: `${300 + index * 80}ms` }} // Reduced delay
             >
-              <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <stat.icon className="w-6 h-6 text-red-500" />
+              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-3"> {/* Reduced size and margin */}
+                <stat.icon className="w-5 h-5 text-red-500" /> {/* Reduced icon size */}
               </div>
-              <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-              <div className="text-red-500 font-semibold mb-2">{stat.label}</div>
-              <div className="text-gray-400 text-sm">{stat.description}</div>
+              <div className="text-2xl font-bold text-white mb-1">{stat.value}</div> {/* Reduced text size and margin */}
+              <div className="text-red-500 font-semibold mb-1 text-sm">{stat.label}</div> {/* Reduced text size and margin */}
+              <div className="text-gray-400 text-xs">{stat.description}</div> {/* Reduced text size */}
             </div>
           ))}
         </div>
 
         {/* Labels Grid */}
-        <div className={`mb-16 transition-all duration-1000 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl font-bold text-center text-white mb-12">Our Partner Labels</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className={`mb-12 transition-all duration-1000 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-2xl font-bold text-center text-white mb-8">Our Partner Labels</h2> {/* Reduced text size and margin */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"> {/* Reduced gap */}
             {labels.map((label, index) => (
               <LabelCard key={label.name} label={label} index={index} />
             ))}
@@ -332,22 +332,22 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
         </div>
 
         {/* Services Section */}
-        <div className={`mb-16 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl font-bold text-center text-white mb-12">What We Provide</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className={`mb-12 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-2xl font-bold text-center text-white mb-8">What We Provide</h2> {/* Reduced text size and margin */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"> {/* Reduced gap */}
             {services.map((service, index) => (
               <div 
                 key={service.title}
-                className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-6 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 hover:bg-red-500/5 text-center ${
+                className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-4 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 hover:bg-red-500/5 text-center ${ // Reduced padding
                   isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                 }`}
-                style={{ transitionDelay: `${1200 + index * 100}ms` }}
+                style={{ transitionDelay: `${1100 + index * 80}ms` }} // Reduced delay
               >
-                <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <service.icon className="w-6 h-6 text-red-500" />
+                <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-3"> {/* Reduced size and margin */}
+                  <service.icon className="w-5 h-5 text-red-500" /> {/* Reduced icon size */}
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-3">{service.title}</h3>
-                <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
+                <h3 className="text-base font-semibold text-white mb-2">{service.title}</h3> {/* Reduced text size and margin */}
+                <p className="text-gray-300 text-xs leading-relaxed">{service.description}</p> {/* Reduced text size */}
               </div>
             ))}
           </div>
@@ -355,21 +355,21 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
 
         {/* Call to Action */}
         <div className={`text-center transition-all duration-1000 delay-1200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl font-bold text-white mb-6">Want to Join Our Network?</h2>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-white mb-4">Want to Join Our Network?</h2> {/* Reduced text size and margin */}
+          <p className="text-gray-300 mb-6 max-w-xl mx-auto text-sm"> {/* Reduced text size, margin and max-width */}
             If you're running a music label and want to benefit from our infrastructure and network, 
             we'd love to hear from you. Let's build the future of music together.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center"> {/* Reduced gap */}
             <button 
               onClick={() => window.location.href = 'mailto:info@rt8.co.za?subject=Label Partnership Inquiry'}
-              className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25"
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25 text-sm" // Reduced padding and text size
             >
               PARTNER WITH US
             </button>
             <button 
               onClick={() => setCurrentPage('home')}
-              className="border-2 border-white hover:border-red-500 text-white hover:text-red-500 px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              className="border-2 border-white hover:border-red-500 text-white hover:text-red-500 px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 text-sm" // Reduced padding and text size
             >
               BACK TO HOME
             </button>

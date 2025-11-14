@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
     <footer className="relative bottom-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-t border-red-500/20 mt-20">
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-center">
-          <p className="text-white/80 text-sm font-medium tracking-wide flex items-center gap-2">
+          <div className="text-white/80 text-sm font-medium tracking-wide flex items-center gap-2">
             <ScrambledText
               as="span"
               radius={60}
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
             >
               Hosting by Psycom
             </ScrambledText>
-          </p>
+          </div>
         </div>
       </div>
     </footer>

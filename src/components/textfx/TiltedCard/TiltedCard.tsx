@@ -1,6 +1,6 @@
-import type { SpringOptions } from "motion/react";
+import type { SpringOptions } from "framer-motion";
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 interface TiltedCardProps {
 	imageSrc: React.ComponentProps<"img">["src"];
@@ -28,12 +28,12 @@ export default function TiltedCard({
 	imageSrc,
 	altText = "Tilted card image",
 	captionText = "",
-	containerHeight = "300px",
+	containerHeight = "250px", // Reduced from 300px
 	containerWidth = "100%",
-	imageHeight = "300px",
-	imageWidth = "300px",
-	scaleOnHover = 1.1,
-	rotateAmplitude = 14,
+	imageHeight = "250px", // Reduced from 300px
+	imageWidth = "250px", // Reduced from 300px
+	scaleOnHover = 1.05, // Reduced from 1.1
+	rotateAmplitude = 12, // Reduced from 14
 	showMobileWarning = true,
 	showTooltip = true,
 	overlayContent = null,
@@ -119,7 +119,7 @@ export default function TiltedCard({
 				<motion.img
 					src={imageSrc}
 					alt={altText}
-					className="absolute top-0 left-0 object-cover rounded-[15px] will-change-transform [transform:translateZ(0)]"
+					className="absolute top-0 left-0 object-cover rounded-[12px] will-change-transform [transform:translateZ(0)]" // Reduced border radius
 					style={{
 						width: imageWidth,
 						height: imageHeight,
@@ -135,7 +135,7 @@ export default function TiltedCard({
 
 			{showTooltip && (
 				<motion.figcaption
-					className="pointer-events-none absolute left-0 top-0 rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] opacity-0 z-[3] hidden sm:block"
+					className="pointer-events-none absolute left-0 top-0 rounded-[4px] bg-white px-[8px] py-[3px] text-[9px] text-[#2d2d2d] opacity-0 z-[3] hidden sm:block" // Reduced tooltip size
 					style={{
 						x,
 						y,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Users, Mail, Linkedin, Twitter, Instagram, Music, Award, Globe } from 'lucide-react';
-import ChromaGrid, { ChromaItem } from './textfx/ChromaGrid/ChromaGrid';
+import { Mail, Linkedin, Twitter, Instagram } from 'lucide-react';
+
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 interface MeetTheTeamProps {
@@ -22,8 +22,8 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
     mass: 2,
   };
 
-  const rotateAmplitude = 12;
-  const scaleOnHover = 1.05;
+  const rotateAmplitude = 10; // Reduced from 12
+  const scaleOnHover = 1.03; // Reduced from 1.05
 
   // Component for individual team member card with tilt effect
   const TeamMemberCard = ({ member, index }: { member: any, index: number }) => {
@@ -61,11 +61,11 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
     return (
       <motion.div
         ref={cardRef}
-        className={`relative flex flex-col rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer group ${
+        className={`relative flex flex-col rounded-[16px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer group ${
           isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
         style={{
-          transitionDelay: `${400 + index * 100}ms`,
+          transitionDelay: `${300 + index * 80}ms`, // Reduced delay
           background: 'linear-gradient(145deg,#EF4444,#000)',
           '--spotlight-color': 'rgba(255,255,255,0.3)',
           rotateX,
@@ -85,11 +85,11 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
           }}
         />
         {/* Member Image with Glitch Effects */}
-        <div className="relative h-64 overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+        <div className="relative h-56 overflow-hidden" style={{ transform: 'translateZ(0)' }}> {/* Reduced height from h-64 */}
           <img
             src={hoveredIndex === index ? member.imageHover : member.imageStandard}
             alt={member.name}
-            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 glitch-image rounded-[15px]"
+            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 glitch-image rounded-[12px]" /* Reduced border radius */
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=400';
@@ -107,32 +107,32 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
           {/* Scanlines effect */}
           <div className="scanlines absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
 
-          <div className="absolute bottom-4 left-4 right-4 z-10">
-            <h3 className="text-xl font-bold text-white mb-1 glitch-text">{member.name}</h3>
-            <p className="text-red-500 font-medium">{member.role}</p>
+          <div className="absolute bottom-3 left-3 right-3 z-10"> {/* Reduced padding */}
+            <h3 className="text-lg font-bold text-white mb-1 glitch-text">{member.name}</h3> {/* Reduced text size */}
+            <p className="text-red-500 font-medium text-sm">{member.role}</p> {/* Reduced text size */}
           </div>
         </div>
 
         {/* Member Info */}
-        <div className="p-6" style={{ transform: 'translateZ(30px)' }}>
-          <div className="mb-4">
-            <span className="inline-block bg-red-500/20 text-red-500 px-3 py-1 rounded-full text-sm font-medium">
+        <div className="p-4" style={{ transform: 'translateZ(30px)' }}> {/* Reduced padding from p-6 */}
+          <div className="mb-3"> {/* Reduced margin */}
+            <span className="inline-block bg-red-500/20 text-red-500 px-2.5 py-0.5 rounded-full text-xs font-medium"> {/* Reduced padding */}
               {member.department}
             </span>
           </div>
 
-          <p className="text-gray-300 text-sm leading-relaxed mb-4">
+          <p className="text-gray-300 text-xs leading-relaxed mb-3"> {/* Reduced text size and margin */}
             {member.bio}
           </p>
 
           {/* Skills */}
-          <div className="mb-4">
-            <h4 className="text-white font-semibold mb-2 text-sm">Expertise:</h4>
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-3"> {/* Reduced margin */}
+            <h4 className="text-white font-semibold mb-1.5 text-xs">Expertise:</h4> {/* Reduced text size and margin */}
+            <div className="flex flex-wrap gap-1.5"> {/* Reduced gap */}
               {member.skills.map((skill: string) => (
                 <span
                   key={skill}
-                  className="bg-black/60 text-gray-300 px-2 py-1 rounded text-xs hover:bg-red-500/20 hover:text-red-500 transition-colors duration-300"
+                  className="bg-black/60 text-gray-300 px-1.5 py-0.5 rounded text-xs hover:bg-red-500/20 hover:text-red-500 transition-colors duration-300" /* Reduced padding */
                 >
                   {skill}
                 </span>
@@ -141,14 +141,14 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
           </div>
 
           {/* Social Links */}
-          <div className="flex space-x-3">
+          <div className="flex space-x-2"> {/* Reduced spacing */}
             {member.social.email && (
               <a
                 href={`mailto:${member.social.email}`}
-                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                className="w-7 h-7 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110" /* Reduced size */
                 title="Email"
               >
-                <Mail className="w-4 h-4" />
+                <Mail className="w-3.5 h-3.5" /> {/* Reduced icon size */}
               </a>
             )}
             {member.social.linkedin && (
@@ -156,10 +156,10 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
                 href={member.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                className="w-7 h-7 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110" /* Reduced size */
                 title="LinkedIn"
               >
-                <Linkedin className="w-4 h-4" />
+                <Linkedin className="w-3.5 h-3.5" /> {/* Reduced icon size */}
               </a>
             )}
             {member.social.twitter && (
@@ -167,10 +167,10 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
                 href={member.social.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                className="w-7 h-7 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110" /* Reduced size */
                 title="Twitter"
               >
-                <Twitter className="w-4 h-4" />
+                <Twitter className="w-3.5 h-3.5" /> {/* Reduced icon size */}
               </a>
             )}
             {member.social.instagram && (
@@ -178,10 +178,10 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
                 href={member.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                className="w-7 h-7 bg-red-500/20 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-110" /* Reduced size */
                 title="Instagram"
               >
-                <Instagram className="w-4 h-4" />
+                <Instagram className="w-3.5 h-3.5" /> {/* Reduced icon size */}
               </a>
             )}
           </div>
@@ -346,17 +346,7 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
     },
   ];
 
-  // Transform team members to ChromaItem format
-  const chromaItems: ChromaItem[] = teamMembers.map((member) => ({
-    image: member.imageStandard,
-    title: member.name,
-    subtitle: member.role,
-    handle: member.social.instagram ? `@${member.social.instagram.split('/').pop()}` : undefined,
-    location: member.department,
-    borderColor: '#EF4444', // Red color to match theme
-    gradient: 'linear-gradient(145deg,#EF4444,#000)',
-    url: member.social.instagram || member.social.linkedin
-  }));
+
 
   return (
     <section className="min-h-screen flex items-center justify-center relative pt-32 pb-32">
@@ -405,171 +395,173 @@ const MeetTheTeam: React.FC<MeetTheTeamProps> = ({ setCurrentPage }) => {
         </div>
       </div>
 
-      <style jsx>{`
-        .glitch-image {
-          position: relative;
-        }
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .glitch-image {
+            position: relative;
+          }
 
-        .glitch-image:hover {
-          animation: glitch 0.3s infinite;
-        }
+          .glitch-image:hover {
+            animation: glitch 0.3s infinite;
+          }
 
-        .glitch-layer-1 {
-          animation: glitch-1 0.6s infinite;
-        }
+          .glitch-layer-1 {
+            animation: glitch-1 0.6s infinite;
+          }
 
-        .glitch-layer-2 {
-          animation: glitch-2 0.8s infinite;
-        }
+          .glitch-layer-2 {
+            animation: glitch-2 0.8s infinite;
+          }
 
-        .glitch-layer-3 {
-          animation: glitch-3 1s infinite;
-        }
+          .glitch-layer-3 {
+            animation: glitch-3 1s infinite;
+          }
 
-        .scanlines {
-          background: repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(255, 255, 255, 0.03) 2px,
-            rgba(255, 255, 255, 0.03) 4px
-          );
-          animation: scanlines 0.1s linear infinite;
-        }
+          .scanlines {
+            background: repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 2px,
+              rgba(255, 255, 255, 0.03) 2px,
+              rgba(255, 255, 255, 0.03) 4px
+            );
+            animation: scanlines 0.1s linear infinite;
+          }
 
-        .glitch-text:hover {
-          animation: text-glitch 0.5s infinite;
-        }
+          .glitch-text:hover {
+            animation: text-glitch 0.5s infinite;
+          }
 
-        @keyframes glitch {
-          0% { transform: translate(0); }
-          20% { transform: translate(-2px, 2px); }
-          40% { transform: translate(-2px, -2px); }
-          60% { transform: translate(2px, 2px); }
-          80% { transform: translate(2px, -2px); }
-          100% { transform: translate(0); }
-        }
+          @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+          }
 
-        @keyframes glitch-1 {
-          0% { 
-            clip-path: inset(40% 0 61% 0);
-            transform: translate(-2px, -2px);
+          @keyframes glitch-1 {
+            0% { 
+              clip-path: inset(40% 0 61% 0);
+              transform: translate(-2px, -2px);
+            }
+            20% { 
+              clip-path: inset(92% 0 1% 0);
+              transform: translate(2px, 2px);
+            }
+            40% { 
+              clip-path: inset(43% 0 1% 0);
+              transform: translate(-2px, 2px);
+            }
+            60% { 
+              clip-path: inset(25% 0 58% 0);
+              transform: translate(2px, -2px);
+            }
+            80% { 
+              clip-path: inset(54% 0 7% 0);
+              transform: translate(-2px, -2px);
+            }
+            100% { 
+              clip-path: inset(58% 0 43% 0);
+              transform: translate(0);
+            }
           }
-          20% { 
-            clip-path: inset(92% 0 1% 0);
-            transform: translate(2px, 2px);
-          }
-          40% { 
-            clip-path: inset(43% 0 1% 0);
-            transform: translate(-2px, 2px);
-          }
-          60% { 
-            clip-path: inset(25% 0 58% 0);
-            transform: translate(2px, -2px);
-          }
-          80% { 
-            clip-path: inset(54% 0 7% 0);
-            transform: translate(-2px, -2px);
-          }
-          100% { 
-            clip-path: inset(58% 0 43% 0);
-            transform: translate(0);
-          }
-        }
 
-        @keyframes glitch-2 {
-          0% { 
-            clip-path: inset(25% 0 58% 0);
-            transform: translate(2px, 1px);
+          @keyframes glitch-2 {
+            0% { 
+              clip-path: inset(25% 0 58% 0);
+              transform: translate(2px, 1px);
+            }
+            20% { 
+              clip-path: inset(54% 0 7% 0);
+              transform: translate(-1px, -2px);
+            }
+            40% { 
+              clip-path: inset(58% 0 43% 0);
+              transform: translate(1px, 2px);
+            }
+            60% { 
+              clip-path: inset(40% 0 61% 0);
+              transform: translate(-2px, 1px);
+            }
+            80% { 
+              clip-path: inset(92% 0 1% 0);
+              transform: translate(2px, -1px);
+            }
+            100% { 
+              clip-path: inset(43% 0 1% 0);
+              transform: translate(0);
+            }
           }
-          20% { 
-            clip-path: inset(54% 0 7% 0);
-            transform: translate(-1px, -2px);
-          }
-          40% { 
-            clip-path: inset(58% 0 43% 0);
-            transform: translate(1px, 2px);
-          }
-          60% { 
-            clip-path: inset(40% 0 61% 0);
-            transform: translate(-2px, 1px);
-          }
-          80% { 
-            clip-path: inset(92% 0 1% 0);
-            transform: translate(2px, -1px);
-          }
-          100% { 
-            clip-path: inset(43% 0 1% 0);
-            transform: translate(0);
-          }
-        }
 
-        @keyframes glitch-3 {
-          0% { 
-            clip-path: inset(58% 0 43% 0);
-            transform: translate(1px, -1px);
+          @keyframes glitch-3 {
+            0% { 
+              clip-path: inset(58% 0 43% 0);
+              transform: translate(1px, -1px);
+            }
+            25% { 
+              clip-path: inset(25% 0 58% 0);
+              transform: translate(-1px, 1px);
+            }
+            50% { 
+              clip-path: inset(92% 0 1% 0);
+              transform: translate(1px, 1px);
+            }
+            75% { 
+              clip-path: inset(40% 0 61% 0);
+              transform: translate(-1px, -1px);
+            }
+            100% { 
+              clip-path: inset(54% 0 7% 0);
+              transform: translate(0);
+            }
           }
-          25% { 
-            clip-path: inset(25% 0 58% 0);
-            transform: translate(-1px, 1px);
-          }
-          50% { 
-            clip-path: inset(92% 0 1% 0);
-            transform: translate(1px, 1px);
-          }
-          75% { 
-            clip-path: inset(40% 0 61% 0);
-            transform: translate(-1px, -1px);
-          }
-          100% { 
-            clip-path: inset(54% 0 7% 0);
-            transform: translate(0);
-          }
-        }
 
-        @keyframes scanlines {
-          0% { transform: translateY(0); }
-          100% { transform: translateY(4px); }
-        }
+          @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+          }
 
-        @keyframes text-glitch {
-          0% { 
-            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                        -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
-                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+          @keyframes text-glitch {
+            0% { 
+              text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                          -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                          0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            15% { 
+              text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                          -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                          0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            16% { 
+              text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                          0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                          -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            49% { 
+              text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                          0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                          -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            50% { 
+              text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                          0.05em 0 0 rgba(0, 255, 0, 0.75),
+                          0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            99% { 
+              text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                          0.05em 0 0 rgba(0, 255, 0, 0.75),
+                          0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            100% { 
+              text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
+                          -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
+                          -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
           }
-          15% { 
-            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                        -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
-                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-          }
-          16% { 
-            text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
-                        0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
-                        -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
-          }
-          49% { 
-            text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
-                        0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
-                        -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
-          }
-          50% { 
-            text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
-                        0.05em 0 0 rgba(0, 255, 0, 0.75),
-                        0 -0.05em 0 rgba(0, 0, 255, 0.75);
-          }
-          99% { 
-            text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
-                        0.05em 0 0 rgba(0, 255, 0, 0.75),
-                        0 -0.05em 0 rgba(0, 0, 255, 0.75);
-          }
-          100% { 
-            text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
-                        -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
-                        -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
-          }
-        }
-      `}</style>
+        `
+      }} />
     </section>
   );
 };
