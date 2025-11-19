@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import ScrambledText from './textfx/ScrambledText/ScrambledText';
-import MetallicPaint, { defaultParams } from './textfx/MetallicPaint/MetallicPaint';
 import { useScrollFade } from '../hooks/useScrollFade';
-import logoSvg from '../assets/Group (1).svg';
+import { Music, Sparkles } from 'lucide-react';
+import logoSvg from '../assets/Group.svg';
 
 const Hero: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [metallicImageData, setMetallicImageData] = useState<ImageData | null>(null);
   const heroContainerRef = useRef<HTMLElement>(null);
 
   // Scroll fade hooks for staggered animation
@@ -19,192 +17,167 @@ const Hero: React.FC = () => {
     setIsLoaded(true);
   }, []);
 
-  useEffect(() => {
-    // Try to load the SVG content and create a data URL for canvas rendering
-    const loadSvgAsDataUrl = async () => {
-      try {
-        // Fetch the SVG content
-        const response = await fetch(logoSvg);
-        const svgText = await response.text();
-
-        // Create a data URL from the SVG
-        const dataUrl = `data:image/svg+xml;base64,${btoa(svgText)}`;
-
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = dataUrl;
-
-        await new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) throw new Error('Could not get canvas context');
-
-        // Make canvas larger for better quality
-        const size = Math.max(img.width, img.height, 512);
-        canvas.width = size;
-        canvas.height = size;
-
-        // Fill with white background first
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, size, size);
-
-        // Center the image
-        const x = (size - img.width) / 2;
-        const y = (size - img.height) / 2;
-
-        ctx.drawImage(img, x, y, img.width, img.height);
-        const imageData = ctx.getImageData(0, 0, size, size);
-        setMetallicImageData(imageData);
-      } catch (error) {
-        console.error('Failed to load SVG as data URL:', error);
-        // Fallback: create a simple metallic shape
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        const size = 512;
-        canvas.width = size;
-        canvas.height = size;
-
-        // Create a simple metallic shape
-        ctx.fillStyle = 'rgba(200, 200, 200, 0.8)';
-        ctx.fillRect(0, 0, size, size);
-
-        // Add some contrast
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-        ctx.fillRect(size * 0.2, size * 0.2, size * 0.6, size * 0.6);
-
-        const imageData = ctx.getImageData(0, 0, size, size);
-        setMetallicImageData(imageData);
-      }
-    };
-
-    loadSvgAsDataUrl();
-  }, []);
-
   return (
-    <section ref={heroContainerRef} className="min-h-screen flex items-center justify-center relative pt-6 sm:pt-12 pb-6 sm:pb-12 px-2 sm:px-4"> {/* Reduced padding */}
-      <div className="text-center max-w-3xl mx-auto"> {/* Reduced max-width */}
-        {/* Main Title */}
+    <section
+      ref={heroContainerRef}
+      className="min-h-[85vh] md:min-h-[90vh] flex items-center justify-center relative pt-8 sm:pt-12 md:pt-16 pb-8 sm:pb-12 md:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden"
+    >
+      {/* Animated Background Elements - Optimized for all screens */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating orbs - Responsive sizing */}
+        <div className="absolute top-10 sm:top-20 left-5 sm:left-10 w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 bg-neon-red/10 rounded-full blur-3xl animate-pulse"></div>
+        <div
+          className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-56 h-56 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-neon-pink/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: '1s' }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[450px] sm:h-[450px] md:w-[600px] md:h-[600px] bg-neon-cyan/5 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: '2s' }}
+        ></div>
+
+        {/* Animated particles - Reduced on mobile for performance */}
+        {[...Array(window.innerWidth < 768 ? 10 : 20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white/20 rounded-full animate-float hidden sm:block"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${10 + Math.random() * 10}s`
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="text-center w-full max-w-7xl mx-auto relative z-10 px-4 sm:px-6">
+        {/* Main Title - Enhanced visibility and scaling */}
         <div
           ref={titleFade.ref}
           className={`transition-all duration-1000 delay-200 ${isLoaded ? 'translate-y-0' : 'translate-y-10'}`}
           style={{ opacity: isLoaded ? titleFade.opacity : 0 }}
         >
-          <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-6 leading-tight px-2"> {/* Reduced text sizes */}
-            <ScrambledText
-              as="span"
-              radius={100}
-              duration={1.2}
-              speed={0.4}
-              scrambleChars=".:"
-              className="metallic-text-red px-1.5 sm:px-3 py-0.5 sm:py-1 inline-block transform -rotate-2 shadow-2xl mb-1.5 sm:mb-3 text-base sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl" // Reduced sizes
+          <h1 className="font-display font-extrabold mb-8 sm:mb-10 md:mb-12 leading-[1.05] tracking-tight">
+            {/* Main headline with crystal-clear gradient */}
+            <span
+              className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl mb-4 sm:mb-6"
+              style={{
+                background: 'linear-gradient(135deg, #dc2626 0%, #f43f5e 45%, #dc2626 90%)',
+                backgroundSize: '200% auto',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                filter: 'drop-shadow(0 4px 30px rgba(220, 38, 38, 0.5)) drop-shadow(0 0 60px rgba(244, 63, 94, 0.3))',
+                animation: 'gradient 8s ease infinite',
+                fontWeight: '900'
+              }}
             >
               A HARMONIC SYMPHONY
-            </ScrambledText>
-            <br />
-            <ScrambledText
-              as="span"
-              radius={100}
-              duration={1.0}
-              speed={0.5}
-              scrambleChars=".:"
-              className="metallic-text-silver text-lg sm:text-2xl md:text-4xl lg:text-5xl" // Reduced sizes
+            </span>
+            {/* Subtitle with perfect contrast */}
+            <span
+              className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white font-light tracking-wide mt-3 sm:mt-4"
+              style={{
+                textShadow: '0 2px 20px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.15)',
+                letterSpacing: '0.05em'
+              }}
             >
               OF ART & INNOVATION
-            </ScrambledText>
+            </span>
           </h1>
         </div>
 
-        {/* Central Logo */}
+        {/* Central Logo - Responsive sizing with proper aspect ratio */}
         <div
           ref={logoFade.ref}
           className={`transition-all duration-1500 delay-300 ${isLoaded ? 'scale-100' : 'scale-95'}`}
           style={{ opacity: isLoaded ? logoFade.opacity : 0 }}
         >
-          <div className="relative w-40 h-40 sm:w-52 sm:h-52 mx-auto mb-3 sm:mb-6 flex items-center justify-center"> {/* Reduced size */}
-            {metallicImageData ? (
-              <MetallicPaint imageData={metallicImageData} params={defaultParams} />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-600 rounded-full animate-pulse"></div>
-            )}
+          <div className="relative w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto mb-8 sm:mb-10 flex items-center justify-center group">
+            {/* Multiple glow layers - Adjusted for mobile */}
+            <div className="absolute inset-0 bg-neon-red/30 blur-2xl sm:blur-3xl rounded-full animate-pulse"></div>
+            <div
+              className="absolute inset-3 sm:inset-4 bg-neon-pink/20 blur-xl sm:blur-2xl rounded-full animate-pulse"
+              style={{ animationDelay: '0.5s' }}
+            ></div>
+
+            {/* Rotating rings - Hidden on very small screens for performance */}
+            <div className="hidden sm:block absolute inset-0 rounded-full border-2 border-neon-red/20 animate-spin-slow"></div>
+            <div className="hidden sm:block absolute inset-6 md:inset-8 rounded-full border border-neon-pink/20 animate-spin-reverse"></div>
+
+            {/* Logo - Optimized drop shadow for mobile */}
+            <img
+              src={logoSvg}
+              alt="RT8 Logo"
+              className="relative z-10 w-full h-full drop-shadow-[0_0_20px_rgba(220,38,38,0.6)] sm:drop-shadow-[0_0_25px_rgba(220,38,38,0.6)] group-hover:drop-shadow-[0_0_30px_rgba(220,38,38,0.8)] sm:group-hover:drop-shadow-[0_0_35px_rgba(220,38,38,0.8)] transition-all duration-500 group-hover:scale-105"
+            />
           </div>
         </div>
 
-        {/* Subtitle */}
+        {/* Subtitle - Responsive text sizing */}
         <div
           ref={subtitleFade.ref}
           className={`transition-all duration-1000 delay-500 ${isLoaded ? 'translate-y-0' : 'translate-y-10'}`}
           style={{ opacity: isLoaded ? subtitleFade.opacity : 0 }}
         >
-          <ScrambledText
-            as="p"
-            radius={80}
-            duration={1.0}
-            speed={0.4}
-            scrambleChars=".:"
-            className="metallic-text-subtitle text-sm md:text-sm max-w-xl mx-auto leading-relaxed px-3" // Reduced sizes
-          >
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-6 mb-10 sm:mb-12 font-light">
             Where creativity and technology meets artistic expression.
-          </ScrambledText>
+          </p>
         </div>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons - Optimized for mobile stacking */}
         <div
           ref={buttonsFade.ref}
-          className={`mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 transition-all duration-1000 delay-700 ${isLoaded ? 'translate-y-0' : 'translate-y-10'}`} // Reduced margin and gap
+          className={`flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 transition-all duration-1000 delay-700 ${isLoaded ? 'translate-y-0' : 'translate-y-10'} px-4`}
           style={{ opacity: isLoaded ? buttonsFade.opacity : 0 }}
         >
+          {/* Primary Button - Music */}
           <a
             href="https://music.rt8.co.za"
             target="_blank"
             rel="noopener noreferrer"
-            className="metallic-button-red relative inline-flex items-center justify-center px-6 py-2.5 text-base font-semibold rounded-full shadow-2xl group hover:shadow-3xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-background overflow-hidden transition-all duration-300" // Reduced padding and text size
+            className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-neon-red to-neon-crimson rounded-full font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] sm:hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] min-w-[200px] max-w-[280px] sm:max-w-none"
           >
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-red-600 via-red-500 to-red-400 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-red-400 via-red-300 to-red-200 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></span>
-            <ScrambledText
-              as="span"
-              radius={80}
-              duration={0.8}
-              speed={0.4}
-              scrambleChars=".:"
-              className="relative z-10 text-white drop-shadow-lg font-semibold"
-              buttonMode={true}
-            >
-              Music
-            </ScrambledText>
-            <svg className="ml-1.5 w-4 h-4 relative z-10 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> {/* Reduced margin and size */}
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v14M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 6l12-3"></path>
-            </svg>
+            {/* Animated shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+            {/* Glow effect */}
+            <div className="absolute inset-0 bg-neon-red/50 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <Music className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="font-display tracking-wide text-sm sm:text-base">Explore Music</span>
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+            </span>
           </a>
+
+          {/* Secondary Button - Digital */}
           <a
             href="https://digital.rt8.co.za"
             target="_blank"
             rel="noopener noreferrer"
-            className="metallic-button-silver relative inline-flex items-center justify-center px-6 py-2.5 text-base font-semibold rounded-full shadow-2xl group hover:shadow-3xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-background overflow-hidden transition-all duration-300" // Reduced padding and text size
+            className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-full font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:border-neon-cyan/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] sm:hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] min-w-[200px] max-w-[280px] sm:max-w-none"
           >
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-300 via-gray-200 to-gray-100 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-100 via-white to-gray-50 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></span>
-            <ScrambledText
-              as="span"
-              radius={80}
-              duration={0.8}
-              speed={0.4}
-              scrambleChars=".:"
-              className="relative z-10 text-gray-800 drop-shadow-lg font-semibold"
-              buttonMode={true}
-            >
-              Digital
-            </ScrambledText>
-            <svg className="ml-1.5 w-4 h-4 relative z-10 text-gray-800 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> {/* Reduced margin and size */}
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
+            {/* Animated border glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/0 via-neon-cyan/20 to-neon-cyan/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="font-display tracking-wide text-sm sm:text-base">Digital Services</span>
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+            </span>
           </a>
+        </div>
+
+        {/* Scroll indicator - Hidden on mobile, shown on larger screens */}
+        <div className="hidden md:block mt-12 lg:mt-16 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/20 rounded-full mx-auto flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-neon-red rounded-full animate-pulse"></div>
+          </div>
         </div>
       </div>
     </section>

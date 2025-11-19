@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Building2, Music, Users, Globe, Award, TrendingUp, ExternalLink } from 'lucide-react';
+import { Music, Globe, Users, BarChart, Radio, Zap, Disc, Mic2 } from 'lucide-react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 interface LabelsOnRotateProps {
@@ -13,24 +13,23 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
     setIsLoaded(true);
   }, []);
 
-  // Tilt effect configuration - optimized for performance
+  // Tilt effect configuration
   const springValues = {
-    damping: 25, // Reduced from 30
-    stiffness: 80, // Reduced from 100
-    mass: 1, // Reduced from 2
+    damping: 30,
+    stiffness: 100,
+    mass: 2,
   };
 
-  const rotateAmplitude = 6; // Reduced from 8
-  const scaleOnHover = 1.01; // Reduced from 1.02
+  const rotateAmplitude = 10;
+  const scaleOnHover = 1.02;
 
-  // Component for individual label card with tilt effect
-  const LabelCard = ({ label, index }: { label: any, index: number }) => {
-    const cardRef = useRef<HTMLDivElement>(null);
+  const LabelCard = ({ label }: { label: any }) => {
+    const cardRef = useRef<HTMLAnchorElement>(null);
     const rotateX = useSpring(useMotionValue(0), springValues);
     const rotateY = useSpring(useMotionValue(0), springValues);
     const scale = useSpring(1, springValues);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (!cardRef.current) return;
 
       const rect = cardRef.current.getBoundingClientRect();
@@ -55,326 +54,261 @@ const LabelsOnRotate: React.FC<LabelsOnRotateProps> = ({ setCurrentPage }) => {
     };
 
     return (
-      <motion.div
+      <motion.a
+        href={label.link}
+        target="_blank"
+        rel="noopener noreferrer"
         ref={cardRef}
-        className={`relative flex flex-col rounded-[16px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer group ${
-          label.featured ? 'ring-2 ring-red-500/30' : ''
-        } ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        className="relative block h-full"
         style={{
-          transitionDelay: `${600 + index * 80}ms`, // Reduced delay
-          background: 'linear-gradient(145deg,#EF4444,#000)',
-          '--spotlight-color': 'rgba(255,255,255,0.3)',
           rotateX,
           rotateY,
           scale,
-          transformStyle: 'preserve-3d'
+          transformStyle: 'preserve-3d',
+          perspective: '1000px'
         } as any}
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Spotlight effect */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 opacity-0 group-hover:opacity-100"
-          style={{
-            background: 'radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%)',
-          }}
-        />
-        {label.featured && (
-          <div className="absolute top-3 right-3 bg-red-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold z-10"> {/* Reduced padding and position */}
-            FEATURED
-          </div>
-        )}
-
-        {/* Label Logo */}
-        <div className="relative h-40 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-6" style={{ transform: 'translateZ(0)' }}> {/* Reduced height and padding */}
-          <img
-            src={label.logo}
-            alt={label.name}
-            className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110"
+        <div className="glass-card p-6 rounded-3xl h-full border border-glass-border hover:border-neon-cyan/50 transition-all duration-300 group flex flex-col items-center text-center relative overflow-hidden">
+          {/* Spotlight effect */}
+          <div
+            className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 opacity-0 group-hover:opacity-100"
+            style={{
+              background: 'radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.1), transparent 70%)',
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-        </div>
 
-        {/* Label Info */}
-        <div className="p-4" style={{ transform: 'translateZ(30px)' }}> {/* Reduced padding */}
-          <div className="flex items-center justify-between mb-2"> {/* Reduced margin */}
-            <h3 className="text-lg font-bold text-white">{label.name}</h3> {/* Reduced text size */}
-            <span className="bg-red-500/20 text-red-500 px-2.5 py-0.5 rounded-full text-xs font-medium"> {/* Reduced padding */}
-              {label.genre}
-            </span>
+          <div className="w-32 h-32 mb-6 relative z-20 rounded-full overflow-hidden border-2 border-glass-border group-hover:border-neon-cyan transition-colors duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+            <img
+              src={label.logo}
+              alt={label.name}
+              className="w-full h-full object-cover"
+            />
           </div>
 
-          <p className="text-gray-300 text-xs leading-relaxed mb-3"> {/* Reduced text size and margin */}
+          <h3 className="text-2xl font-display font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors z-20">{label.name}</h3>
+          <p className="text-neon-red text-sm font-bold mb-4 z-20 tracking-wider">{label.genre}</p>
+          <p className="text-gray-400 text-sm leading-relaxed z-20 font-light">
             {label.description}
           </p>
 
-          {/* Label Stats */}
-          <div className="text-center mb-3"> {/* Reduced margin */}
-            <div className="text-white font-bold text-sm">{label.founded}</div> {/* Reduced text size */}
-            <div className="text-gray-400 text-xs">Founded</div>
-          </div>
-
-          {/* Action Button */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => window.location.href = label.instagram}
-              className="w-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-1.5 text-sm" // Reduced padding and text size
-            >
-              <ExternalLink className="w-3.5 h-3.5" /> {/* Reduced icon size */}
-              <span>Instagram</span>
-            </button>
+          <div className="mt-auto pt-6 z-20">
+            <span className="text-xs font-bold text-white border border-white/10 px-3 py-1 rounded-full group-hover:bg-neon-cyan/20 group-hover:border-neon-cyan/50 transition-all duration-300">
+              VISIT LABEL
+            </span>
           </div>
         </div>
-      </motion.div>
+      </motion.a>
     );
   };
 
   const labels = [
     {
-      name: 'Night Moon',
-      logo: 'https://lh3.googleusercontent.com/eLaVo1OaCfrvteZl5BTlyNsjcGk5gnzpcf9I5ZOcWUU_XjtSA1GtTQJ9GewVqHqVF5slz5LgdSqWfVPVOg=s265-w265-h265',
-      genre: 'Multi-Genred',
-      founded: '2019',
-      description: 'Established to orbit the planet and focus on stars.',
-      instagram: 'https://instagram.com/nightmoonrec',
-      featured: true
-    },
-    {
       name: 'SonicBass Records',
+      genre: 'PSYTRANCE / TECHNO',
+      description: 'A powerhouse of psychedelic beats and driving techno rhythms, pushing the boundaries of the underground sound.',
       logo: 'https://lh3.googleusercontent.com/UXtc9gdr80-9lIqXm0VZ90--6Q23QvMhBIl6C3oK4zUGWvpxbIrkl1vZ9RPd914IBM_nzBiU9y82wvSAgQ=s265-w265-h265',
-      genre: 'Bass Focused Music',
-      founded: '2014',
-      description: 'The label that started it all... for us atleast.',
-      instagram: 'https://instagram.com/sonicbassrec',
-      featured: true
+      link: 'https://www.labelradar.com/labels/sonicbass/portal'
     },
     {
-      name: 'Brainfreez Records',
-      logo: 'https://lh3.googleusercontent.com/ojZoHS8yyS-DLAtbCDhuev12bsol7IgxE7uEVAWUX8FK3XrXdfvcj3WI0JJ8R0VXmyBb50RpSgwedfMNHQ=s265-w265-h265',
-      genre: 'Pop / DnB',
-      founded: '2025',
-      description: 'The latest establishment coming from Canadian based DJ / Producer & Instrumentalist "FizzX"',
-      instagram: 'https://www.instagram.com/fizzxmusic/',
-      featured: true
+      name: 'Aurorafields',
+      genre: 'DEEP HOUSE / MELODIC',
+      description: 'Crafting ethereal soundscapes and emotive melodies that transport listeners to another dimension of deep house.',
+      logo: 'https://lh3.googleusercontent.com/Lr4kwuVfBE9TR1u7nuOTpQxFH2isZvd_-9ZRoPkuxYSRTdH7MGlH9qH7h4EbhsIs7dBGKht0WFGd8oaTOA=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/aurorafields/portal'
     },
     {
-      name: 'Aurorafields Records',
-      logo: 'https://lh3.googleusercontent.com/wMBkT8-T2bVaiY4Cnb5qdfr1QCXqI0ZJLI5xcfdxzYJYv2BWRtrfdv-zhJF7l3d_ODeeBdazY38w9_IhLA=s265-w265-h265',
-      genre: 'Deep House',
-      founded: '2021',
-      description: 'Focusing on the freshest deep, mellow grooves from around the globe.',
-      instagram: 'https://www.instagram.com/aurora_fields_records/',
-      featured: true
+      name: 'Round9',
+      genre: 'BASS / DUBSTEP',
+      description: 'Heavy-hitting bass lines and earth-shattering drops for the true bass heads and dubstep enthusiasts.',
+      logo: 'https://lh3.googleusercontent.com/vvOEacD4zVg38TLfyUPco3366qZ-su51n_qeSNrzcGWR3wQmempQ0jPU0RSYOFo30kf3ivRaiKqmJiGpyA=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/round9/portal'
     },
     {
-      name: '5Select Sounds',
-      logo: 'https://lh3.googleusercontent.com/Nj1NV_fWy9DCYyv9p3lK7oBm12qdfW4cUzyxgmG6x2gd2G9vMdQtBXqmRPcj1BLFDBd0w-yNGGBMUyJIEg=s265-w265-h265',
-      genre: 'Deep & Bass House',
-      founded: '2024',
-      description: 'Latest edition from Pando G, focusing on the dancefloor.',
-      instagram: 'https://www.instagram.com/5selectsounds/',
-      featured: true
+      name: 'LunaTunes',
+      genre: 'LO-FI / CHILL',
+      description: 'The perfect soundtrack for late nights and early mornings, featuring dusty beats and nostalgic vibes.',
+      logo: 'https://lh3.googleusercontent.com/B0Pu7sVfZ4IgpQaaDg0kW2Hb8VnrzO_yFP3ueTSK0mpGiafkPHBKGhptBlVkZFsV_CuDDg6dhtd821c_zw=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/lunatunes/portal'
     },
-    
-  
-
+    {
+      name: 'Niyah Fiyah',
+      genre: 'AFRO HOUSE / TRIBAL',
+      description: 'Celebrating the rhythmic soul of Afro House with infectious grooves and tribal percussion.',
+      logo: 'https://lh3.googleusercontent.com/9_BsaqR9XoF0t8nfXQ4RpdvjBt2Djo3q7rZUAU-lB82MUSjwJoZHcYBYYxutMAKefapF8ivhzEgVoLYgmQ=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/niyahfiyah/portal'
+    },
     {
       name: 'Drum & Debauchery',
+      genre: 'DRUM AND BASS',
+      description: 'High-octane drum and bass that fuels the dancefloor with relentless energy and precision production.',
       logo: 'https://lh3.googleusercontent.com/jShwO7ahNi_6cQDF9uowMTUtYWu12qciCY27RLD36Klxtj2viSX3vZjgUriy1HT7d85LpoZZN8_KYZ9gew=s265-w265-h265',
-      genre: 'Drum & Bass',
-      founded: '2025',
-      description: 'Founded by the scottish wildlander Morgan Mcbain, DND in no bored game, it high impactful DRUMS with LOTS OF BASS!.',
-      instagram: 'https://www.instagram.com/drum.and.debauchery/',
-      featured: true
+      link: 'https://www.labelradar.com/labels/drumanddebauchery/portal'
     },
     {
-      name: 'Round9 Records',
-      logo: 'https://lh3.googleusercontent.com/vvOEacD4zVg38TLfyUPco3366qZ-su51n_qeSNrzcGWR3wQmempQ0jPU0RSYOFo30kf3ivRaiKqmJiGpyA=s265-w265-h265',
-      genre: 'Indie Rock / Pop',
-      founded: '2025',
-      description: 'Established by Ywonne Teixeira, empowered by her undying love for real world instruments',
-      instagram: 'https://www.instagram.com/rt8.co.za/',
-      featured: true
+      name: '5Select',
+      genre: 'HOUSE / TECH HOUSE',
+      description: 'Curating the finest selection of house and tech house cuts for the discerning clubber.',
+      logo: 'https://lh3.googleusercontent.com/Nj1NV_fWy9DCYyv9p3lK7oBm12qdfW4cUzyxgmG6x2gd2G9vMdQtBXqmRPcj1BLFDBd0w-yNGGBMUyJIEg=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/5select/portal'
     },
     {
-      name: 'BeNaam Music',
-      logo: 'https://lh3.googleusercontent.com/VM9swFwNcL2fWy_3xpfUKhLQg2klUpz509oifNDdQCnMCVeTWdXlE9gX-T8YE5o8Idk_OCwlWA4yNzEIFg=s265-w265-h265',
-      genre: 'Multi-Genred',
-      founded: '2024',
-      description: 'Founded by Zaphixx, Empowering the sounds of the orient!',
-      instagram: 'https://www.instagram.com/rt8.co.za/',
-      featured: true
+      name: 'BrainFreez',
+      genre: 'HARD DANCE / PSY',
+      description: 'Mind-bending hard dance and psytrance that freezes your brain and melts your face.',
+      logo: 'https://lh3.googleusercontent.com/mZ5dzkN4DMAl7EzMZkpsh4mNtPJt2WOeAMy8_qSyo_blPlB_3jXrlDzI4_wwvoCV2f_Bbvlf-T0usV1ftQ=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/brainfreez/portal'
     },
     {
-      name: 'LunaTunes Records',
-      logo: 'https://lh3.googleusercontent.com/b6vtY7vA7np4MaHqEpSzcLkAU7H9t1YGk7HrHn9d2w767V9uHD_Fwqii7i6mMqZ0JA60547IENJgnBzRGA=s265-w265-h265',
-      genre: 'Multi-Genred',
-      founded: '2023',
-      description: 'Founded by JoMo Luna (previously: JoMo Beats) Luna Tunes provides the luni-est tunes straight outta Alberton',
-      instagram: 'https://www.instagram.com/lunatunesrec/',
-      featured: true
-    },
-    {
-      name: 'Taijitu Audio Group',
+      name: 'Taijitu',
+      genre: 'PROGRESSIVE / MELODIC',
+      description: 'Finding balance in the spectrum of sound, blending progressive elements with melodic storytelling.',
       logo: 'https://lh3.googleusercontent.com/5K-qStJ_WhQxUFOOhs0eT6vBUlurdfgoJifPwyH330DBf78nhhXMCdoyK_dsIrEOMonRsl6A5yG3YN321A=s265-w265-h265',
-      genre: 'Dubstep / Trap / Bass Music',
-      founded: '2024',
-      description: 'Founded by Drew Swango this Atlanta based label has begun making waves in the bass music scene. Drew comes from a proud heritage of pure creative thinking and has prior experience in the live events sector.',
-      instagram: 'https://www.instagram.com/taijitu_records/',
-      featured: true
+      link: 'https://www.labelradar.com/labels/taijitu/portal'
     },
     {
-      name: 'Niyah Fiyah Records',
-      logo: 'https://lh3.googleusercontent.com/9_BsaqR9XoF0t8nfXQ4RpdvjBt2Djo3q7rZUAU-lB82MUSjwJoZHcYBYYxutMAKefapF8ivhzEgVoLYgmQ=s265-w265-h265',
-      genre: 'Dancehall',
-      founded: '2024',
-      description: 'Dancehall expansion from German based Producer / Lyricist "Victory Nation".',
-      instagram: 'https://www.instagram.com/rvbeatzofficial_3/',
-      featured: true
+      name: 'Night Moon',
+      genre: 'AMBIENT / DOWNTEMPO',
+      description: 'Exploring the darker, quieter side of electronic music with atmospheric textures and downtempo rhythms.',
+      logo: 'https://lh3.googleusercontent.com/eLaVo1OaCfrvteZl5BTlyNsjcGk5gnzpcf9I5ZOcWUU_XjtSA1GtTQJ9GewVqHqVF5slz5LgdSqWfVPVOg=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/nightmoon/portal'
+    },
+    {
+      name: 'BeNaam',
+      genre: 'EXPERIMENTAL / IDM',
+      description: 'Defying genres and expectations with experimental sounds and intelligent dance music.',
+      logo: 'https://lh3.googleusercontent.com/VM9swFwNcL2fWy_3xpfUKhLQg2klUpz509oifNDdQCnMCVeTWdXlE9gX-T8YE5o8Idk_OCwlWA4yNzEIFg=s265-w265-h265',
+      link: 'https://www.labelradar.com/labels/benaam/portal'
     }
   ];
 
   const stats = [
-    {
-      icon: Building2,
-      value: '15+',
-      label: 'Partner Labels',
-      description: 'Growing network of specialized music labels'
-    },
-    {
-      icon: Users,
-      value: '200+',
-      label: 'Signed Artists',
-      description: 'Talented musicians across all genres'
-    },
-    {
-      icon: Music,
-      value: '500+',
-      label: 'Total Releases',
-      description: 'High-quality music releases and counting'
-    },
-    {
-      icon: Globe,
-      value: '50+',
-      label: 'Countries',
-      description: 'Global reach and distribution network'
-    }
+    { label: 'Active Labels', value: '11+', icon: Disc },
+    { label: 'Artists Signed', value: '500+', icon: Users },
+    { label: 'Global Reach', value: '150+', icon: Globe },
+    { label: 'Releases', value: '1000+', icon: Music },
   ];
 
   const services = [
     {
-      icon: Music,
-      title: 'Music Distribution',
-      description: 'Global digital distribution across all major streaming platforms and stores.'
+      icon: BarChart,
+      title: 'Distribution & Analytics',
+      description: 'Comprehensive distribution to all major platforms with detailed analytics and reporting.'
     },
     {
-      icon: TrendingUp,
-      title: 'Marketing Support',
-      description: 'Comprehensive marketing campaigns and promotional strategies for maximum reach.'
+      icon: Radio,
+      title: 'Marketing & PR',
+      description: 'Strategic marketing campaigns and PR support to get your music heard by the right audience.'
     },
     {
-      icon: Award,
+      icon: Zap,
+      title: 'Sync & Licensing',
+      description: 'Opportunities for placement in film, TV, games, and advertising.'
+    },
+    {
+      icon: Mic2,
       title: 'Artist Development',
-      description: 'Professional guidance and resources to help artists grow their careers.'
-    },
-    {
-      icon: Globe,
-      title: 'Global Network',
-      description: 'Access to our international network of industry professionals and partners.'
+      description: 'Guidance and support to help artists refine their sound and build their brand.'
     }
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative pt-24 pb-24"> {/* Reduced padding */}
-      <div className="max-w-6xl mx-auto px-4"> {/* Reduced max-width */}
+    <section className="min-h-screen py-20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-red/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
         {/* Header */}
-        <div className={`text-center mb-12 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4"> {/* Reduced text sizes */}
+        <div className={`text-center mb-20 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 tracking-tight">
             <span className="text-white">LABELS ON</span>
-            <span className="text-red-500 ml-3">ROTATE</span> {/* Reduced margin */}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-red ml-4 glow-text-cyan">ROTATE</span>
           </h1>
-          <div className="w-20 h-1 bg-red-500 mx-auto mb-6"></div> {/* Reduced width and margin */}
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"> {/* Reduced text size and max-width */}
-            Discover the diverse ecosystem of music labels that benefit from RT8's innovative infrastructure. 
-            Each label brings unique sounds and artistic vision to our collective mission.
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+            Discover the diverse ecosystem of labels powering the Rotate network.
+            From underground techno to ethereal ambient, we cover the full spectrum of electronic music.
           </p>
         </div>
 
         {/* Stats Section */}
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}> {/* Reduced gap and margin */}
-          {stats.map((stat, index) => (
-            <div 
-              key={stat.label}
-              className={`text-center bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-4 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 ${ // Reduced padding
-                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{ transitionDelay: `${300 + index * 80}ms` }} // Reduced delay
-            >
-              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-3"> {/* Reduced size and margin */}
-                <stat.icon className="w-5 h-5 text-red-500" /> {/* Reduced icon size */}
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          {stats.map((stat) => (
+            <div key={stat.label} className="glass-card p-6 rounded-2xl text-center group hover:bg-white/5 transition-colors duration-300">
+              <div className="w-12 h-12 bg-neon-cyan/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <stat.icon className="w-6 h-6 text-neon-cyan" />
               </div>
-              <div className="text-2xl font-bold text-white mb-1">{stat.value}</div> {/* Reduced text size and margin */}
-              <div className="text-red-500 font-semibold mb-1 text-sm">{stat.label}</div> {/* Reduced text size and margin */}
-              <div className="text-gray-400 text-xs">{stat.description}</div> {/* Reduced text size */}
+              <div className="text-3xl font-bold text-white mb-1 glow-text-cyan">{stat.value}</div>
+              <div className="text-gray-400 text-sm uppercase tracking-wider">{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Labels Grid */}
-        <div className={`mb-12 transition-all duration-1000 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-2xl font-bold text-center text-white mb-8">Our Partner Labels</h2> {/* Reduced text size and margin */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"> {/* Reduced gap */}
-            {labels.map((label, index) => (
-              <LabelCard key={label.name} label={label} index={index} />
-            ))}
-          </div>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20 transition-all duration-1000 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          {labels.map((label) => (
+            <LabelCard key={label.name} label={label} />
+          ))}
         </div>
 
         {/* Services Section */}
-        <div className={`mb-12 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-2xl font-bold text-center text-white mb-8">What We Provide</h2> {/* Reduced text size and margin */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"> {/* Reduced gap */}
-            {services.map((service, index) => (
-              <div 
+        <div className={`mb-20 transition-all duration-1000 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-3xl font-display font-bold text-center text-white mb-12">
+            Our Services
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.map((service) => (
+              <div
                 key={service.title}
-                className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-4 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 hover:bg-red-500/5 text-center ${ // Reduced padding
-                  isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${1100 + index * 80}ms` }} // Reduced delay
+                className="glass-card p-6 rounded-2xl hover:border-neon-red/40 transition-all duration-300 group"
               >
-                <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-3"> {/* Reduced size and margin */}
-                  <service.icon className="w-5 h-5 text-red-500" /> {/* Reduced icon size */}
+                <div className="w-12 h-12 bg-neon-red/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <service.icon className="w-6 h-6 text-neon-red group-hover:text-white transition-colors" />
                 </div>
-                <h3 className="text-base font-semibold text-white mb-2">{service.title}</h3> {/* Reduced text size and margin */}
-                <p className="text-gray-300 text-xs leading-relaxed">{service.description}</p> {/* Reduced text size */}
+                <h3 className="text-lg font-bold text-white mb-3">{service.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {service.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Call to Action */}
-        <div className={`text-center transition-all duration-1000 delay-1200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-2xl font-bold text-white mb-4">Want to Join Our Network?</h2> {/* Reduced text size and margin */}
-          <p className="text-gray-300 mb-6 max-w-xl mx-auto text-sm"> {/* Reduced text size, margin and max-width */}
-            If you're running a music label and want to benefit from our infrastructure and network, 
-            we'd love to hear from you. Let's build the future of music together.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center"> {/* Reduced gap */}
-            <button 
-              onClick={() => window.location.href = 'mailto:info@rt8.co.za?subject=Label Partnership Inquiry'}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25 text-sm" // Reduced padding and text size
-            >
-              PARTNER WITH US
-            </button>
-            <button 
-              onClick={() => setCurrentPage('home')}
-              className="border-2 border-white hover:border-red-500 text-white hover:text-red-500 px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 text-sm" // Reduced padding and text size
-            >
-              BACK TO HOME
-            </button>
+        <div className={`text-center transition-all duration-1000 delay-800 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="glass-panel p-10 rounded-3xl inline-block max-w-4xl w-full relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/10 to-neon-red/10 opacity-50"></div>
+            <div className="relative z-10">
+              <h2 className="text-3xl font-display font-bold text-white mb-4">
+                Start Your Label Journey
+              </h2>
+              <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+                Are you a label owner looking to take your brand to the next level?
+                Partner with Rotate and access our global infrastructure and expertise.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => window.location.href = 'mailto:contact@rt8.co.za'}
+                  className="btn-primary"
+                >
+                  CONTACT US
+                </button>
+                <button
+                  onClick={() => setCurrentPage('demo-submissions')}
+                  className="btn-glass"
+                >
+                  SUBMIT DEMO
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </section>
   );

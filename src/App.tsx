@@ -1,10 +1,6 @@
-import { useState, useEffect, Suspense, lazy, useRef } from 'react';
-import PillHeader from './components/PillHeader';
-import Footer from './components/Footer';
+import { useState, useEffect, Suspense, lazy } from 'react';
+import NewLayout from './components/NewLayout';
 import SEOHead from './components/SEOHead';
-import LoadingScreen from './components/LoadingScreen';
-
-// Removed Background import since we're removing animated backgrounds
 
 // Lazy load components for code splitting
 const Hero = lazy(() => import('./components/Hero'));
@@ -15,37 +11,19 @@ const MeetTheTeam = lazy(() => import('./components/MeetTheTeam'));
 const WorkAtRT8 = lazy(() => import('./components/WorkAtRT8'));
 const LabelsOnRotate = lazy(() => import('./components/LabelsOnRotate'));
 
-// Preload all components
-const preloadComponents = () => {
-  return Promise.all([
-    import('./components/Hero'),
-    import('./components/AboutUs'),
-    import('./components/WhyChooseRotate'),
-    import('./components/DemoSubmissions'),
-    import('./components/MeetTheTeam'),
-    import('./components/WorkAtRT8'),
-    import('./components/LabelsOnRotate')
-  ]);
-};
-
 // Loading component with skeleton
 const LoadingFallback = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
+  <div className="min-h-screen flex items-center justify-center bg-deep-space">
     <div className="text-center">
-      <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <div className="w-16 h-16 border-4 border-neon-red border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
       <div className="text-white text-lg font-medium">Loading RT8...</div>
-      <div className="text-textSecondary text-sm mt-2">Preparing the experience</div>
+      <div className="text-gray-400 text-sm mt-2">Preparing the experience</div>
     </div>
   </div>
 );
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const [showLoading, setShowLoading] = useState(true);
-  const [componentsPreloaded, setComponentsPreloaded] = useState(false);
-  const preloadAttemptedRef = useRef(false);
-
-
 
   // Handle URL routing
   useEffect(() => {
@@ -69,22 +47,6 @@ function App() {
     };
   }, []);
 
-  // Preload all components during loading screen
-  useEffect(() => {
-    if (showLoading && !preloadAttemptedRef.current) {
-      preloadAttemptedRef.current = true;
-      preloadComponents()
-        .then(() => {
-          setComponentsPreloaded(true);
-        })
-        .catch((error) => {
-          console.error('Failed to preload components:', error);
-          // Still mark as preloaded to avoid blocking the app
-          setComponentsPreloaded(true);
-        });
-    }
-  }, [showLoading]);
-
   // Update URL when page changes
   const handlePageChange = (page: string) => {
     setCurrentPage(page);
@@ -95,18 +57,10 @@ function App() {
     }
   };
 
-  // Handle loading completion
-  const handleLoadingComplete = () => {
-    // Only complete loading when components are preloaded
-    if (componentsPreloaded) {
-      setShowLoading(false);
-    }
-  };
-
   // SEO configuration for each page
   const getSEOConfig = () => {
     const baseUrl = 'https://rt8.co.za/';
-    
+
     switch (currentPage) {
       case 'about':
         return {
@@ -181,29 +135,13 @@ function App() {
 
   const seoConfig = getSEOConfig();
 
-  // Show loading screen while app is initializing and preloading components
-  if (showLoading) {
-    return (
-      <div className="min-h-screen text-white overflow-x-hidden">
-        <LoadingScreen onLoadingComplete={handleLoadingComplete} />
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen text-white overflow-x-hidden">
+    <NewLayout currentPage={currentPage} setCurrentPage={handlePageChange}>
       <SEOHead {...seoConfig} />
-      {/* Removed animated background component to keep it simple */}
-      <PillHeader currentPage={currentPage} setCurrentPage={handlePageChange} />
-
-
-      <div className="px-2 sm:px-4 pt-20 sm:pt-24 md:pt-28 relative z-10">
-        <Suspense fallback={<LoadingFallback />}>
-          {renderPage()}
-        </Suspense>
-      </div>
-      <Footer />
-    </div>
+      <Suspense fallback={<LoadingFallback />}>
+        {renderPage()}
+      </Suspense>
+    </NewLayout>
   );
 }
 

@@ -8,6 +8,7 @@ export default {
         '2xl': '1536px', // Extra large screens
       },
       colors: {
+        // Original colors kept for compatibility
         primary: '#9E7FFF',
         secondary: '#38bdf8',
         accent: '#f472b6',
@@ -19,9 +20,24 @@ export default {
         success: '#10b981',
         warning: '#f59e0b',
         error: '#ef4444',
+
+        // New Redesign Colors (Dark Red/Crimson Theme)
+        'neon-red': '#dc2626',      // Primary dark red
+        'neon-crimson': '#991b1b',  // Deeper crimson
+        'neon-cyan': '#06b6d4',     // Accent cyan
+        'neon-pink': '#f43f5e',     // Accent pink
+        'deep-space': '#0a0a12',
+        'glass-surface': 'rgba(255, 255, 255, 0.05)',
+        'glass-border': 'rgba(255, 255, 255, 0.1)',
+      },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        display: ['Outfit', 'Inter', 'sans-serif'],
       },
       borderRadius: {
-        'xl': '16px', // Adding a common rounded corner size based on design principles
+        'xl': '16px',
+        '2xl': '24px',
+        '3xl': '32px',
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
@@ -37,6 +53,10 @@ export default {
         '7xl': ['4.5rem', { lineHeight: '1' }],
         '8xl': ['6rem', { lineHeight: '1' }],
         '9xl': ['8rem', { lineHeight: '1' }],
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'hero-glow': 'conic-gradient(from 180deg at 50% 50%, #2a2a35 0deg, #0a0a12 180deg, #2a2a35 360deg)',
       },
     },
   },

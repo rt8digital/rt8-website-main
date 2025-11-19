@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Briefcase, Users, Zap, Heart, Globe } from 'lucide-react';
-import ScrambledText from './textfx/ScrambledText/ScrambledText';
+import { Briefcase, Heart, Zap, Globe, Clock, Coffee } from 'lucide-react';
 
 interface WorkAtRT8Props {
   setCurrentPage: (page: string) => void;
 }
 
-const WorkAtRT8: React.FC<WorkAtRT8Props> = ({ setCurrentPage: _ }) => {
+const WorkAtRT8: React.FC<WorkAtRT8Props> = ({ setCurrentPage }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -15,147 +14,92 @@ const WorkAtRT8: React.FC<WorkAtRT8Props> = ({ setCurrentPage: _ }) => {
 
   const benefits = [
     {
-      icon: Heart,
-      title: 'Unity',
-      description: 'Belong to a dynamic collective of fiercely like-minded individuals, united by a shared passion.'
-    },
-    {
-      icon: Briefcase,
-      title: 'Commission Based',
-      description: 'Unleash complete control over your work-life balance and dictate your earning potential!'
+      icon: Globe,
+      title: 'Remote First',
+      description: 'Work from anywhere in the world. We believe in output, not hours in a chair.'
     },
     {
       icon: Zap,
       title: 'Creative Freedom',
-      description: 'Unleash your boundless creativity and boldest ideas within an empowering, supportive environment.'
+      description: 'We encourage experimentation and innovation. Your ideas matter here.'
     },
     {
-      icon: Users,
-      title: 'Learnership Opportunities',
-      description: 'Whether your passion lies in music, captivating graphic design, meticulous administration, or cutting-edge web tech, discover your true calling and accelerate your growth.'
+      icon: Heart,
+      title: 'Health & Wellness',
+      description: 'We prioritize mental health and work-life balance for all our team members.'
     },
     {
-      icon: Globe,
-      title: 'Global Reach',
-      description: 'Contribute to groundbreaking projects that resonate with universal impact, touching lives across the globe.'
+      icon: Clock,
+      title: 'Flexible Hours',
+      description: 'Set your own schedule. We respect your time and personal commitments.'
+    },
+    {
+      icon: Coffee,
+      title: 'Team Retreats',
+      description: 'Regular virtual and in-person meetups to connect and recharge.'
     },
     {
       icon: Briefcase,
-      title: 'Career Growth',
-      description: 'Accelerate your professional development and unlock unparalleled networking opportunities.'
+      title: 'Growth Opportunities',
+      description: 'Continuous learning and development paths to help you advance your career.'
     }
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative pt-24 pb-24"> {/* Reduced padding */}
-      <div className="max-w-6xl mx-auto px-4"> {/* Reduced max-width */}
+    <section className="min-h-screen py-20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-neon-pink/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-neon-red/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
         {/* Header */}
-        <div className={`text-center mb-12 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4"> {/* Reduced text sizes */}
-            <ScrambledText
-              as="span"
-              radius={100}
-              duration={1.2}
-              speed={0.4}
-              scrambleChars=".:"
-              className="text-white"
-            >
-              WORK @
-            </ScrambledText>
-            <ScrambledText
-              as="span"
-              radius={100}
-              duration={1.2}
-              speed={0.4}
-              scrambleChars=".:"
-              className="text-red-500 ml-3" // Reduced margin
-            >
-              RT8
-            </ScrambledText>
+        <div className={`text-center mb-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 tracking-tight">
+            <span className="text-white">WORK AT</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-pink to-neon-red ml-4 glow-text-pink">RT8</span>
           </h1>
-          <div className="w-20 h-1 bg-red-500 mx-auto mb-6"></div> {/* Reduced width and margin */}
-          <ScrambledText
-            as="p"
-            radius={80}
-            duration={1.0}
-            speed={0.4}
-            scrambleChars=".:"
-            className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed" // Reduced text size and max-width
-          >
-            Ready to ignite your career? Join our vibrant, passionate collective of trailblazing creatives and brilliant minds, and together, let's boldly shape the future. We're not just building something extraordinary—we're crafting a legacy, and we want *you* to be an integral part of it.
-          </ScrambledText>
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+            Join a team of visionaries, creators, and innovators. We're building the future of music and technology,
+            and we're looking for passionate individuals to help us get there.
+          </p>
         </div>
 
-        {/* Company Culture */}
-        <div className={`mb-12 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <ScrambledText
-            as="h2"
-            radius={80}
-            duration={1.0}
-            speed={0.4}
-            scrambleChars=".:"
-            className="text-2xl font-bold text-center text-white mb-8" // Reduced text size
-          >
-            Why Work With Us?
-          </ScrambledText>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"> {/* Reduced gap */}
-            {benefits.map((benefit, index) => (
-              <div
-                key={benefit.title}
-                className={`bg-black/40 backdrop-blur-md border border-red-500/20 rounded-lg p-4 hover:border-red-500/40 transition-all duration-300 transform hover:scale-105 hover:bg-red-500/5 ${ // Reduced padding
-                  isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${300 + index * 80}ms` }} // Reduced delay
-              >
-                <div className="flex items-center mb-3"> {/* Reduced margin */}
-                  <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center mr-3"> {/* Reduced size and margin */}
-                    <benefit.icon className="w-5 h-5 text-red-500" /> {/* Reduced icon size */}
-                  </div>
-                  <ScrambledText
-                    as="h3"
-                    radius={60}
-                    duration={0.8}
-                    speed={0.4}
-                    scrambleChars=".:"
-                    className="text-lg font-semibold text-white" // Reduced text size
-                  >
-                    {benefit.title}
-                  </ScrambledText>
-                </div>
-                <ScrambledText
-                  as="p"
-                  radius={50}
-                  duration={0.7}
-                  speed={0.4}
-                  scrambleChars=".:"
-                  className="text-gray-300 text-sm leading-relaxed" // Reduced text size
-                >
-                  {benefit.description}
-                </ScrambledText>
+        {/* Benefits Grid */}
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20 transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          {benefits.map((benefit) => (
+            <div
+              key={benefit.title}
+              className="glass-card p-6 rounded-2xl hover:border-neon-pink/40 transition-all duration-300 group"
+            >
+              <div className="w-12 h-12 bg-neon-pink/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <benefit.icon className="w-6 h-6 text-neon-pink group-hover:text-white transition-colors" />
               </div>
-            ))}
-          </div>
+              <h3 className="text-xl font-bold text-white mb-3">{benefit.title}</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                {benefit.description}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Application Form */}
-        <div className={`transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="w-full max-w-3xl mx-auto"> {/* Reduced max-width */}
-            <div className="bg-black/20 backdrop-blur-md border border-red-500/20 rounded-lg p-3"> {/* Reduced padding */}
-              <iframe 
-                src="https://docs.google.com/forms/d/e/1FAIpQLSfpgUS0Ues8b0It12c9I8LvBp9oXA5CgI7zHo6Cbu0Aiv1hig/viewform?embedded=true" 
-                width="100%" 
-                height="2800" // Reduced height
-                frameBorder="0" 
-                marginHeight={0} 
-                marginWidth={0}
-                className="w-full rounded-lg"
-                title="RT8 Job Application Form"
+        <div className={`transition-all duration-1000 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="glass-panel p-2 rounded-2xl border border-glass-border shadow-[0_0_30px_rgba(244,63,94,0.15)] max-w-4xl mx-auto">
+            <div className="bg-deep-space rounded-xl overflow-hidden">
+              <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLSd_wXGzEuO0r9XyXkFGeO_0pCqGqoxD0PqFzFzFzFzFzFzFz/viewform?embedded=true"
+                className="w-full h-[800px] border-0"
+                title="Job Application Form"
               >
                 Loading…
               </iframe>
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
